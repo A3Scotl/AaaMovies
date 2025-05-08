@@ -3,13 +3,9 @@ import Search from "./Search";
 
 export default function Header() {
   return (
-    <header className="fixed-top ">
+    <header className="fixed-top bg-transparent">
       <nav
-        className="navbar navbar-expand-lg navbar-dark"
-        style={{
-          backgroundColor: "rgba(0,0,0,0.5)",
-          backdropFilter: "blur(5px)",
-        }}
+        className="navbar navbar-expand-lg "
       >
         <div className="container">
           <a className="navbar-brand d-flex d-flex align-items-center" href="/">
@@ -27,12 +23,12 @@ export default function Header() {
                 </a>
               </li>
               <li className="nav-item px-2">
-                <a className="nav-link text-white fw-light" href="/movie">
+                <a className="nav-link text-white fw-light" href="/movies">
                   MOVIE
                 </a>
               </li>
               <li className="nav-item px-2">
-                <a className="nav-link text-white fw-light" href="/web-series">
+                <a className="nav-link text-white fw-light" href="/series">
                   WEB SERIES
                 </a>
               </li>
@@ -45,11 +41,6 @@ export default function Header() {
           </div>
 
           <div className="d-flex align-items-center">
-            {/* <Search /> */}
-            {/* Language */}
-            {/* <button className="btn btn-sm m-3 fw-light custom-en-btn">
-              EN
-            </button> */}
 
             {/* Sign In */}
             <a href="/signin" className="btn btn-sm custom-signin-btn fw-light">

@@ -2,8 +2,8 @@ import React from 'react'
 
 function Home() {
   return (
-    <div>
-      <h1>Welcome to AAMovies</h1>
+    <div style={{height:"100vh"}}>
+    
       <p>This is the home page.</p>
     </div>
   )
