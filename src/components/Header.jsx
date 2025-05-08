@@ -43,7 +43,7 @@ export default function Header() {
           <div className="d-flex align-items-center">
 
             {/* Sign In */}
-            <a href="/signin" className="btn btn-sm custom-signin-btn fw-light">
+            <a href="/signin" className="btn btn-sm custom-btn fw-light">
               SIGN IN
             </a>
           </div>
