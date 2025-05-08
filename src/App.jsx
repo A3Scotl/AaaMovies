@@ -1,12 +1,12 @@
 import './App.css'
 import { Outlet } from 'react-router-dom'
+import Header from './components/Header'
 
 function App() {
   return (
     <>
-      <nav>
-        <a href="/">Home</a> | <a href="/movies">Movies</a> | <a href="/auth">Auth</a>
-      </nav>
+
+      <Header/>
       <main>
         <Outlet />
       </main>
