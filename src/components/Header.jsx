@@ -1,54 +1,65 @@
 import React from "react";
-import Search from "./Search";
 
-export default function Header() {
+const Header = () => {
   return (
-    <header className="fixed-top bg-transparent">
-      <nav
-        className="navbar navbar-expand-lg "
-      >
-        <div className="container">
-          <a className="navbar-brand d-flex d-flex align-items-center" href="/">
-            <span className="ms-2 fw-bold fw-light">AaaMovies</span>
-          </a>
-
-          <div
-            className="collapse navbar-collapse justify-content-center text-white "
-            id="navbarNav"
-          >
-            <ul className="navbar-nav d-flex align-items-center ">
-              <li className="nav-item px-2">
-                <a className="nav-link text-white fw-light" href="/">
-                  HOME
-                </a>
-              </li>
-              <li className="nav-item px-2">
-                <a className="nav-link text-white fw-light" href="/movies">
-                  MOVIE
-                </a>
-              </li>
-              <li className="nav-item px-2">
-                <a className="nav-link text-white fw-light" href="/series">
-                  WEB SERIES
-                </a>
-              </li>
-              <li className="nav-item px-2">
-                <a className="nav-link text-white fw-light" href="/premium">
-                  PREMIUM
-                </a>
-              </li>
-            </ul>
+    <nav className="navbar fixed-top navbar-expand-lg custom-navbar">
+      <div className="container-fluid px-5">
+        <a className="navbar-brand text-white d-flex align-items-center" href="#" style={{width:300}}>
+          <div>
+            <strong>AaaMovies</strong>
           </div>
+        </a>
 
-          <div className="d-flex align-items-center">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNav"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-            {/* Sign In */}
-            <a href="/signin" className="btn btn-sm custom-btn fw-light">
-              SIGN IN
-            </a>
+        <div
+          className="collapse navbar-collapse d-flex align-items-center justify-content-between" 
+          id="mainNav"
+        >
+          <div>
+          
           </div>
+          <ul className="navbar-nav gap-4">
+            <li className="nav-item ">
+              <a className="nav-link text-white custom-txt" href="#">
+                HOME
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link text-white custom-txt" href="#">
+                MOVIE
+              </a>
+            </li>
+             <li className="nav-item">
+              <a className="nav-link text-white custom-txt" href="#">
+                SERIES
+              </a>
+            </li>
+
+             <li className="nav-item">
+              <a className="nav-link text-white custom-txt" href="#">
+                PRIMIUM
+              </a>
+            </li>
+        
+          </ul>
+          <div className="justify-content-end d-flex" style={{width:300}}>
+ <button className="btn custom-btn rounded-pill btn-sm px-3" >
+            <i className="bi bi-person"></i> Login
+          </button>
+          </div>
+         
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
-}
+};
+
+export default Header;

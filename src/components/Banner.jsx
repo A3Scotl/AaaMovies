@@ -1,34 +1,66 @@
-import React from "react";
+  import React from 'react';
 
-export default function Banner() {
-  return (
-    <div className="banner d-flex align-items-center">
-      <div className="overlay"></div>
-      <div className="container content">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 col-md-10 text-center">
-            
-            <h1 className="display-3 fw-bold">
-              <span className="text-primary-color">Entertainment</span>,<br />
-              Movies, TVs Shows, &<br />
-              More.
-            </h1>
-            
-            <div className="d-flex justify-content-center gap-3 mt-4 mb-5">
-              <span className="badge bg-dark">Movie</span>
-              <span className="badge bg-primary-color text-dark custom-btn">HD</span>
-              <span className="text-white">Action, Drama</span>
-              <span className="text-white">2023</span>
-            </div>
-            
-            <div className="mt-4">
-              <button className="btn btn-primary-color btn-lg px-5 py-2 rounded-pill fw-bold custom-btn">
-                PLAY NOW
-              </button>
-            </div>
+  const Banner = () => {
+    return (
+      <div
+        className="position-relative text-white"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: '100vh'
+        }}
+      >
+        <div className="container py-md-5">  
+          <h1 className="fw-bold display-4" style={{paddingTop:100}}>Lãnh Địa Tử Chiến</h1>
+          <p className="fs-5"  style={{color:"#CCFF00"}}>MobLand</p>
+
+          <div className="mb-2">
+            <span className="badge text-dark me-1" style={{backgroundColor:'#CCFF00'}}>IMDb</span>
+            <span className="badge bg-light text-dark me-1">4K</span>
+            <span className="badge bg-secondary me-1">T16</span>
+            <span className="badge bg-secondary me-1">2025</span>
+            <span className="badge bg-secondary me-1">Phần 1</span>
+            <span className="badge bg-secondary">Tập 7</span>
+          </div>
+
+          <div className="mb-3">
+            {['Chính Kịch', 'Hành Động', 'Gay Cấn', 'Hình Sự'].map((genre, i) => (
+              <span key={i} className="badge rounded-pill bg-dark border me-1">{genre}</span>
+            ))}
+          </div>
+
+          <p className="w-50">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo totam facilis, ab fuga doloribus earum a quod quidem dicta provident aspernatur neque animi? Explicabo deserunt cum eos voluptatibus quis soluta.
+          </p>
+
+          <div className="d-flex align-items-center">
+            <button className="btn custom-btn rounded-circle me-3" style={{ width: '48px', height: '48px' }}>
+              <i className="bi bi-play-fill fs-4"></i>
+            </button>
+            <button className="btn custom-btn rounded-circle me-2" style={{ width: '48px', height: '48px' }}>
+              <i className="bi bi-heart fs-5"></i>
+            </button>
+            <button className="btn custom-btn rounded-circle" style={{ width: '48px', height: '48px' }}>
+              <i className="bi bi-info-circle fs-5"></i>
+            </button>
           </div>
         </div>
+
+        {/* Thumbnails */}
+        <div className="position-absolute bottom-0 end-0 p-3 d-flex gap-2">
+          {[...Array(6)].map((_, i) => (
+            <img
+              key={i}
+              src={`/thumb${i + 1}.jpg`}
+              className="rounded"
+              style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+              alt={`thumb${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  };
+
+  export default Banner;

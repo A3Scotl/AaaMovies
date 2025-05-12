@@ -1,194 +1,37 @@
 :root {
-  --primary-color: #CCFF00; /* Màu xanh lá chính */
-  --hover-color: #b3e600; /* Màu xanh lá đậm hơn khi hover */
-  --hover-text-color:black;
-  --text-color: white; /* Màu trắng cho chữ */
-  --background-color: black; /* Màu đen cho nền */
-  --transparent-background: rgba(0, 0, 0, 0.7); /* Nền mờ */
+  --primary-color: #CCFF00;
+  --hover-color: #b3e600;
+  --hover-text-color: black;
+  --text-color: white;
+  --background-color: #000000;
 }
 
-*{
-
-  color: var(--text-color);
-}
-main{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background-color: var(--background-color);
-  
-}
-.navbar-nav .nav-link {
-  font-size: 16px;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  color: var(--text-color);
-}
-
-.navbar-nav .nav-link:hover {
-  color: var(--primary-color) !important;
-}
-.form-control {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  border: none !important;
-  color: var(--text-color) !important;
-}
 .custom-btn {
-  width: fit-content;
-  border: 1px solid var(--primary-color) !important;
+  border: 2px solid var(--primary-color) !important;
   color: var(--text-color) !important;
-  font-size: 14px;
-  padding: 4px 15px;
+  background-color: transparent !important;
+  transition: 0.3s ease;
 }
 
 .custom-btn:hover {
-  background-color: var(--hover-color) !important;
+  background-color: var(--primary-color) !important;
   color: var(--hover-text-color) !important;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 0 8px var(--primary-color);
 }
 
-/* //banner */
-.banner {
-  position: relative;
-  min-height: 100vh;
-  max-height: 900px;
-  background-image: url('https://images.unsplash.com/photo-1746469471553-afa9f34157fd?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-  background-size: cover;
-  background-position: center;
-  color: var(--text-color);
- 
-  overflow: hidden;
+.custom-txt:hover{
+      color: var(--hover-color) !important;
 }
 
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.9) 0%,
-    rgba(0, 0, 0, 0.7) 50%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
+.custom-navbar {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 1000;
 }
 
-.content {
-  position: relative;
-  z-index: 2;
-
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.brand-name {
-  font-size: 1.2rem;
-  font-weight: 300;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-
-.title {
-  font-size: 3.5rem;
+.banner-title {
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 20px;
-  text-transform: capitalize;
-}
-
-.title .highlight {
-  color: var(--primary-color);
-}
-
-.movie-info {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.movie-info .badge {
-  font-size: 0.8rem;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-weight: 500;
-}
-
-.movie-type {
-  background-color: #333;
-  color: white;
-}
-.movie-quality {
-  background-color: var(--primary-color);
-  color: black;
-}
-
-.movie-genre {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.movie-year {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.play-btn {
-  background-color: var(--primary-color);
-  color: var(--hover-text-color);
-  border: none;
-  padding: 10px 25px;
-  border-radius: 30px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(204, 255, 0, 0.3);
-}
-
-.play-btn:hover {
-  background-color: var(--hover-color);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(204, 255, 0, 0.4);
-}
-
-/* Responsive adjustments */
-@media (max-width: 992px) {
-  .title {
-    font-size: 2.8rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .banner {
-    min-height: 500px;
-  }
-  
-  .title {
-    font-size: 2.2rem;
-  }
-  
-  .content {
-    padding-top: 120px;
-  }
-}
-
-@media (max-width: 576px) {
-  .title {
-    font-size: 1.8rem;
-  }
-  
-  .movie-info {
-    gap: 10px;
-  }
 }

@@ -3,7 +3,7 @@ import Banner from '../components/Banner'
 
 function Home() {
   return (
-    <div style={{height:"100vh",width:"100vw"}}>
+    <div style={{height:"100vh",backgroundColor:'black'}}>
      <Banner/>
     </div>
   )
