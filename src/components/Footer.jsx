@@ -2,9 +2,9 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="footer text-center bg-black">
-      <div className="container py-4">
-        <div className="footer-disclaimer mb-4 fw-light">
+    <footer className="footer text-center bg-black py-5">
+      <div className="container py-5">
+        <div className="footer-disclaimer mb-4 fw-light text-white">
           <p>
             AaaMovies is an online movie streaming platform that offers content for entertainment purposes.
             We have a vast collection of movies and series for your viewing pleasure.

@@ -23,6 +23,14 @@ const moviesData = [
     poster:
       "https://ophim17.cc/_next/image?url=https%3A%2F%2Fimg.ophim.live%2Fuploads%2Fmovies%2Ftrong-chung-ta-co-ke-noi-doi-phan-2-thumb.jpg&w=384&q=75",
   },
+  {
+    title: "M.S. Dhoni: The Untold Story",
+    year: 2023,
+    rating: 7.0,
+    duration: "1h 54m",
+    poster:
+      "https://ophim17.cc/_next/image?url=https%3A%2F%2Fimg.ophim.live%2Fuploads%2Fmovies%2Ftrong-chung-ta-co-ke-noi-doi-phan-2-thumb.jpg&w=384&q=75",
+  },
    {
     title: "M.S. Dhoni: The Untold Story",
     year: 2023,
@@ -31,30 +39,7 @@ const moviesData = [
     poster:
       "https://ophim17.cc/_next/image?url=https%3A%2F%2Fimg.ophim.live%2Fuploads%2Fmovies%2Ftrong-chung-ta-co-ke-noi-doi-phan-2-thumb.jpg&w=384&q=75",
   },
-  {
-    title: "Liger",
-    year: 2023,
-    rating: 4.5,
-    duration: "2h 19m",
-    poster:
-      "https://ophim17.cc/_next/image?url=https%3A%2F%2Fimg.ophim.live%2Fuploads%2Fmovies%2Ftrong-chung-ta-co-ke-noi-doi-phan-2-thumb.jpg&w=384&q=75",
-  },
-  {
-    title: "Liger",
-    year: 2023,
-    rating: 4.5,
-    duration: "2h 19m",
-    poster:
-      "https://ophim17.cc/_next/image?url=https%3A%2F%2Fimg.ophim.live%2Fuploads%2Fmovies%2Ftrong-chung-ta-co-ke-noi-doi-phan-2-thumb.jpg&w=384&q=75",
-  },
-  {
-    title: "Liger",
-    year: 2023,
-    rating: 4.5,
-    duration: "2h 19m",
-    poster:
-      "https://ophim17.cc/_next/image?url=https%3A%2F%2Fimg.ophim.live%2Fuploads%2Fmovies%2Ftrong-chung-ta-co-ke-noi-doi-phan-2-thumb.jpg&w=384&q=75",
-  },
+ 
 ];
 
 function Movie({ title, year, rating, duration, poster }) {
@@ -63,7 +48,9 @@ function Movie({ title, year, rating, duration, poster }) {
       className="card bg-dark text-light h-100 border-0 shadow-sm"
       style={{
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
-        cursor:"pointer"
+        cursor: "pointer",
+        width: '100%', 
+        maxWidth: '290px',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "scale(1.05)";
@@ -78,25 +65,42 @@ function Movie({ title, year, rating, duration, poster }) {
         src={poster}
         className="card-img-top"
         alt={title}
-        style={{ objectFit: "cover", borderRadius: "8px 8px 0 0" }}
+        style={{ height: "390px", objectFit: "cover", borderRadius: "8px 8px 0 0" }}
       />
       <div className="card-body p-2 d-flex flex-column gap-2 bg-black">
         <div className="d-flex justify-content-between align-items-center gap-2" style={{ height: 50 }}>
-          <p className="d-flex align-items-center">{title}</p>
-          <p className="d-flex align-items-center"  style={{ color: "#CCFF00"}}>{year}</p>
+          <p
+            className="d-flex align-items-center mb-0 text-white"
+            style={{
+              fontSize: "16px",
+              fontWeight: "bold",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+            }}
+          >
+            {title}
+          </p>
+          <p className="d-flex align-items-center mb-0" style={{ color: "#CCFF00", fontSize: "12px" }}>
+            {year}
+          </p>
         </div>
         <div className="d-flex justify-content-between">
           <p
-            className="card-text btn custom-btn"
-            style={{ width: "fit-content", fontSize: "12px" }}
+            className="card-text btn custom-btn border border-1 px-1 mb-0"
+            style={{ width: "fit-content", fontSize: "10px", color: "#CCFF00" }}
           >
             HD
           </p>
           <div className="d-flex justify-content-evenly align-items-center gap-3">
-            <p className="">{duration} </p>
-            <p className="" style={{ color: "#CCFF00" }}>
+            <p className="mb-0 text-white" style={{ fontSize: "12px" }}>
+              {duration}
+            </p>
+            <p className="mb-0" style={{ color: "#CCFF00", fontSize: "12px" }}>
               ★ {rating}
-            </p> 
+            </p>
           </div>
         </div>
       </div>

@@ -8,8 +8,12 @@ function Home() {
       <div style={{ height: "100vh", backgroundColor: "black" }}>
         <Banner />
       </div>
-      <div style={{ height: "100vh", backgroundColor: "black" }}>
-         <SectionMovieList />
+      <div style={{ backgroundColor: "black" }}>
+         <SectionMovieList />         
+          <SectionMovieList />         
+           <SectionMovieList />         
+            <SectionMovieList />         
+             <SectionMovieList />         
       </div>
     </>
   );
