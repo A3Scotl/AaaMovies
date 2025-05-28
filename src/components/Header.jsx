@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-
+import SearchBar from './SearchBar';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +17,14 @@ const Header = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const openSearch = () => {
+    setIsSearchOpen(true);
+  };
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
   };
 
   return (
@@ -48,10 +57,13 @@ const Header = () => {
           </nav>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 cursor-pointer">
             
             {/* Search Button */}
-            <button className="hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500/80 hover:border-red-400 transition-all duration-300 group">
+            <button 
+              onClick={openSearch}
+              className="cursor-pointer hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500/80 hover:border-red-400 transition-all duration-300 group"
+            >
               <svg className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -114,9 +126,15 @@ const Header = () => {
             <hr className="border-gray-700" />
             
             {/* Mobile Actions */}
-            <div className="space-y-3">
-              <button className="flex items-center justify-center w-full py-3 px-4 bg-white/10 rounded-lg text-white hover:bg-red-500/20 transition-all duration-300">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="space-y-3 cursor-pointer">
+              <button 
+                onClick={() => {
+                  toggleMobileMenu();
+                  openSearch();
+                }}
+                className="cursor-pointer flex items-center justify-center w-full py-3 px-4 bg-white/10 rounded-lg text-white hover:bg-red-500/20 transition-all duration-300"
+              >
+                <svg className="w-5 h-5 mr-2 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m21 21-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 Search
@@ -133,6 +151,9 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* Search Bar Component */}
+      <SearchBar isOpen={isSearchOpen} onClose={closeSearch} />
     </>
   );
 };
