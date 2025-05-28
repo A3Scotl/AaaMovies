@@ -4,7 +4,7 @@ const Banner = () => {
 
   return (
     <div
-      className="w-full bg-cover bg-center bg-no-repeat relative"
+      className="w-full bg-black bg-cover bg-center bg-no-repeat relative"
       style={{
         backgroundImage: `url(${img})`,
         height: "100vh",

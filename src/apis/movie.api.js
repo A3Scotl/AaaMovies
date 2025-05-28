@@ -1,0 +1,21 @@
+import Instance from './instance';
+
+export const getAllNewMovies = async () => {
+    try {
+        const response = await Instance.get('/movies/new');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all movies:', error);
+        throw error;
+    }
+};
+
+export const getAllHotMovies = async () => {
+    try {
+        const response = await Instance.get('/movies/hot');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching hot movies:', error);
+        throw error;
+    }
+};
