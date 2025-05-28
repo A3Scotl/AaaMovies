@@ -9,7 +9,7 @@ function Movies() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const moviesPerPage = 12;
+  const moviesPerPage = 32;
 
   useEffect(() => {
     const fetchMovies = async () => {

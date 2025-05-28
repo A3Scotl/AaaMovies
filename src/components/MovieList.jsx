@@ -6,11 +6,11 @@ import LoadingSpinner from "./LoadingSpinner";
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
-    items: 10,
+    items: 2,
   },
   desktop: {
     breakpoint: { max: 3000, min: 1200 },
-    items: 7,
+    items: 6,
   },
   tablet: {
     breakpoint: { max: 1200, min: 600 },
