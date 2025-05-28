@@ -1,5 +1,15 @@
 import Instance from './instance';
 
+export const getAllMovies = async () => {
+    try {
+        const response = await Instance.get('/movies');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all movies:', error);
+        throw error;
+    }
+};
+
 export const getAllNewMovies = async () => {
     try {
         const response = await Instance.get('/movies/new');

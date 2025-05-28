@@ -4,13 +4,13 @@ import Footer from './components/Footer'
 function App() {
   
   return (
-    <>
+    <div className='bg-black'>
       <Header/>
       <main>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   )
 }
 
