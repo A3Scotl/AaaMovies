@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import LoadingSpinner from "./LoadingSpinner";
 
 const responsive = {
   superLargeDesktop: {

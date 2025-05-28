@@ -1,22 +1,30 @@
 import { useEffect, useState } from "react";
 import {  getAllMovies } from "../apis/movie.api";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function Movies() {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const moviesPerPage = 32; // 8x4 grid
+  const moviesPerPage = 12;
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
+        setIsLoading(true);
+        setError(null);
         const moviesData = await getAllMovies();
         setMovies(moviesData);
         setTotalPages(Math.ceil(moviesData.length / moviesPerPage));
         console.log(moviesData);
       } catch (err) {
         console.error("Error fetching movies:", err);
+        setError("Failed to load movies. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -40,8 +48,34 @@ function Movies() {
     }
   };
 
+  // Show loading spinner while fetching data
+  if (isLoading) {
+    return (
+      <div className="min-h-screen text-white py-28 px-12 flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  // Show error message if there's an error
+  if (error) {
+    return (
+      <div className="min-h-screen text-white py-28 px-12 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 text-xl mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen text-white py-28 px-12">
+    <div className="min-h-screen text-white py-36 px-12">
       {/* Header */}
       <div className="mb-6">
         <p className="text-gray-400 text-sm mt-1">All movies</p>
@@ -60,7 +94,6 @@ function Movies() {
                 src={movie.thumbnail}
                 alt={movie.title}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                
               />
 
               {/* Quality badge */}
@@ -84,7 +117,7 @@ function Movies() {
                 {movie.title}
               </h3>
               <p className="text-xs text-gray-400 mt-1">
-                {movie.originName ||'N/A'}
+                {movie.originName || 'N/A'}
               </p>
             </div>
           </div>
@@ -114,7 +147,6 @@ function Movies() {
           disabled={currentPage === totalPages}
           className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
         >
-         
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
