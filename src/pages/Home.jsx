@@ -1,14 +1,14 @@
 import React from "react";
 import Banner from "../components/Banner";
+import MovieList from "../components/MovieList";
 
 function Home() {
   return (
-    <>
-      <div>
+    <div className="bg-green-100">
         <Banner />
-      </div>
-
-    </>
+        <MovieList title={'Hot Movies'}/>
+        <MovieList title={'New Movies'}/>
+    </div>
   );
 }
 
