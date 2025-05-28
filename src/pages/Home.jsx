@@ -13,12 +13,10 @@ function Home() {
         // Fetch hot movies
         const hotMoviesData = await getAllHotMovies();
         setHotMovies(hotMoviesData); 
-        console.log("hotMoviesData", hotMoviesData);
 
         // Fetch new movies
         const newMoviesData = await getAllNewMovies();
         setNewMovies(newMoviesData); 
-        console.log("newMoviesData", newMoviesData);
 
       } catch (err) {
         console.error("Error fetching movies:", err);
@@ -31,7 +29,7 @@ function Home() {
 
   return (
     <div className="bg-black">
-      <Banner />
+      <Banner movies={hotMovies} />
       <MovieList title="Hot Movies" movies={hotMovies} />
       <MovieList title="New Movies" movies={newMovies} />
     </div>

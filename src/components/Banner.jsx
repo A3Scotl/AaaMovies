@@ -1,75 +1,182 @@
-const Banner = () => {
-  const img =
-    "https://images.unsplash.com/photo-1748383718257-f92ee93eac10?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import LoadingSpinner from "./LoadingSpinner";
+const Banner = ({ movies }) => {
+  const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const currentMovie = movies && movies[currentMovieIndex];
+
+  useEffect(() => {
+    if (movies && movies.length > 0) {
+      const interval = setInterval(() => {
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+          setCurrentMovieIndex((prevIndex) =>
+            prevIndex === movies.length - 1 ? 0 : prevIndex + 1
+          );
+          setIsTransitioning(false);
+        }, 50);
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [movies, currentMovieIndex]);
+
+  const getGenres = (movie) => {
+    if (!movie || !movie.genre) return "Unknown Genre";
+    if (Array.isArray(movie.genre)) {
+      return movie.genre.join(", ");
+    }
+    return movie.genre;
+  };
+
+  if (!movies || movies.length === 0 || !currentMovie) {
+    return (
+      <div
+        className="w-full bg-black flex items-center justify-center"
+        style={{ height: "100vh", minHeight: "600px" }}
+      >
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div
-      className="w-full bg-black bg-cover bg-center bg-no-repeat relative"
-      style={{
-        backgroundImage: `url(${img})`,
-        height: "100vh",
-        minHeight: "600px",
-      }}
+      className="w-full relative overflow-hidden"
+      style={{ height: "100vh", minHeight: "600px" }}
     >
-      <div className="w-full h-full bg-black/40 absolute inset-0" />
+      {/* Background */}
+      <div
+        className={`absolute inset-0 bg-black bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-out ${
+          isTransitioning
+            ? "transform translate-x-full opacity-0"
+            : "transform translate-x-0 opacity-100"
+        }`}
+        style={{
+          backgroundImage: `url(${currentMovie.poster})`,
+        }}
+      >
+        <div className="w-full h-full bg-black/60 absolute inset-0" />
+      </div>
 
-      <div className="flex flex-col lg:flex-row items-center justify-between absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl mx-auto px-4 lg:px-10">
-        <div className="w-full lg:w-1/2 z-10">
-          <div className="flex flex-col space-y-4 lg:space-y-6 items-start text-center lg:text-left">
-            <div className="flex flex-col space-y-3 lg:space-y-4">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
-                <p className="text-red-500 text-3xl">AaaMovies</p>
-                <span className="text-white">Movie name </span>
-              </h1>
-              <div className="flex items-center justify-center lg:justify-start space-x-2 flex-wrap gap-2">
-                <span className="bg-white text-black px-3 py-1 text-xs font-semibold">
-                  HD
-                </span>
-                <span className="bg-white text-black px-3 py-1 text-xs font-semibold">
-                  2019
-                </span>
-                <span className="text-white text-sm">Action, Drama</span>
+      {/* Main Content Container - Properly Centered */}
+      <div className="absolute inset-0 flex items-center justify-center px-4 lg:px-10 z-20">
+        <div
+          className={`w-full max-w-7xl mx-auto transition-all duration-1000 ease-out ${
+            isTransitioning
+              ? "transform translate-x-full opacity-0"
+              : "transform translate-x-0 opacity-100"
+          }`}
+        >
+          {/* Content Layout */}
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
+            {/* Text Content - Left Side */}
+            <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="space-y-6">
+                {/* Title Section */}
+                <div className="space-y-4">
+                  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
+                    <p className="text-red-500 text-2xl md:text-3xl lg:text-4xl mb-2">
+                      AaaMovies
+                    </p>
+                    <span className="text-white block">
+                      {currentMovie.title}
+                    </span>
+                  </h1>
+
+                  {/* Movie Info Tags */}
+                  <div className="flex items-center justify-center lg:justify-start space-x-3 flex-wrap gap-2">
+                    {currentMovie.releaseYear && (
+                      <span className="bg-transparent border-2 border-white text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
+                        {currentMovie.releaseYear}
+                      </span>
+                    )}
+                    <span className="bg-transparent border-2 border-white text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
+                      {currentMovie.quality}
+                    </span>
+                    <span className="text-white text-sm bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
+                      {getGenres(currentMovie)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Play Button */}
+                <div className="flex justify-center lg:justify-start">
+                  <button className="flex items-center p-5 border-2 bg-red-500 text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl">
+                    <svg
+                      className="w-6 h-6 transition-transform duration-300"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 lg:space-x-5">
-              <button className="flex items-center space-x-2 py-3 px-6 border-2 bg-red-500 text-white hover:bg-white hover:text-red-900 cursor-pointer transition-colors rounded-full text-sm lg:text-base font-semibold">
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-                <span>PLAY NOW</span>
-              </button>
-            </div>
-          </div>
-        </div>
+            {/* Movie Poster - Right Side */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center">
+              <div className="w-[280px] h-[380px] lg:w-[320px] lg:h-[420px] relative group">
+                {/* Play button overlay */}
+                <button className="w-full h-full absolute top-0 left-0 p-2 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl z-10 cursor-pointer">
+                  <div className="w-16 h-16 lg:w-20 lg:h-20 bg-red-600 rounded-full flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 shadow-2xl">
+                    <svg
+                      className="w-8 h-8 lg:w-10 lg:h-10 text-white ml-1 transition-transform duration-300"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </button>
 
-        <div className="w-full lg:w-1/2 flex items-center justify-center mt-8 lg:mt-0 z-10">
-          <div className="w-[250px] h-[350px] lg:w-[300px] lg:h-[400px] relative group">
-            <button className="w-full h-full absolute top-0 left-0 flex items-center justify-center backdrop-blur-sm bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out rounded-lg">
-              <div className="w-12 h-12 lg:w-16 lg:h-16 bg-red-600 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 lg:w-8 lg:h-8 text-white ml-1"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+                {/* Movie thumbnail */}
+                <img
+                  src={currentMovie.thumbnail}
+                  alt={currentMovie.title}
+                  className="object-cover w-full h-full rounded-xl shadow-2xl transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-3xl"
+                />
+
+                {/* Decorative border */}
+                {/* <div className="absolute -inset-2 bg-gradient-to-r from-red-500 to-purple-600 rounded-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 -z-10"></div> */}
               </div>
-            </button>
-            <img
-              src={img}
-              alt="banner"
-              className="object-cover w-full h-full rounded-lg shadow-2xl"
-            />
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Movie indicators */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+        {movies.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              if (index !== currentMovieIndex) {
+                setIsTransitioning(true);
+                setTimeout(() => {
+                  setCurrentMovieIndex(index);
+                  setIsTransitioning(false);
+                }, 50);
+              }
+            }}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentMovieIndex
+                ? "bg-red-500 scale-125"
+                : "bg-white/50 hover:bg-white/80 hover:scale-110"
+            }`}
+          />
+        ))}
+      </div>
     </div>
   );
+};
+
+Banner.propTypes = {
+  movies: PropTypes.array,
 };
 
 export default Banner;
