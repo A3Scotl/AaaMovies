@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import LoadingSpinner from "./LoadingSpinner";
-import {getMovieById} from "../apis/movie.api"
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -25,11 +24,13 @@ const responsive = {
 
 const MovieList = ({ title, movies }) => {
   const navigate = useNavigate();
-
   const handleMovieClick = async (movie) => {
-    const data = await getMovieById(movie.movieId);
-    navigate(`/movie/${movie.movieId}`, { 
-      state: { movie : data.data } 
+    if (!movie.movieId) {
+      console.error("Movie ID is undefined:", movie);
+      return;
+    }
+    navigate(`/movie/${movie.movieId}`,{
+      state:{movie}
     });
   };
 
@@ -40,7 +41,7 @@ const MovieList = ({ title, movies }) => {
         {movies.map((movie) => (
           <div
             key={movie.movieId}
-            onClick={() => handleMovieClick(movie)} 
+            onClick={() => handleMovieClick(movie)}
             className="bg-cover bg-no-repeat bg-center w-[200px] h-[300px] relative hover:scale-110 transition-transform duration-500 ease-in-out cursor-pointer mx-2"
             style={{
               backgroundImage: `url(${movie.thumbnail})`,
