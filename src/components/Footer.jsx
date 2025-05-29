@@ -5,9 +5,11 @@ const Footer = () => {
     <footer className="bg-black text-white">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 lg:px-10 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
-          {/* Brand Section */}
+
+        {/* Newsletter Subscription */}
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
+             {/* Brand Section */}
           <div className="space-y-4">
             <h2 className="text-2xl lg:text-3xl font-bold text-red-500 uppercase">
               AaaMovies
@@ -38,55 +40,6 @@ const Footer = () => {
               </a>
             </div>
           </div>
-
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Home</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Movies</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">TV Shows</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Web Series</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">New Releases</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Top Rated</a></li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Categories</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Action</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Drama</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Comedy</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Horror</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Romance</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Sci-Fi</a></li>
-            </ul>
-          </div>
-
-          {/* Support */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-white">Support</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Contact Us</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Help Center</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Terms of Service</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Privacy Policy</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">FAQ</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-red-500 transition-colors text-sm">Report Issue</a></li>
-            </ul>
-          </div>
-
-        </div>
-
-        {/* Newsletter Subscription */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
-            <div className="text-center lg:text-left">
-              <h3 className="text-lg font-semibold text-white mb-2">Stay Updated</h3>
-              <p className="text-gray-300 text-sm">Subscribe to get notifications about new movies and shows</p>
-            </div>
             <div className="flex w-full lg:w-auto max-w-md">
               <input
                 type="email"
