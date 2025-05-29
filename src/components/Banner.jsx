@@ -1,36 +1,56 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import LoadingSpinner from "./LoadingSpinner";
-
+import { getCategoryById } from "../apis/category.api";
 const Banner = ({ movies }) => {
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [currentGenres, setCurrentGenres] = useState([]);
 
-  const currentMovie = movies && movies[currentMovieIndex];
+  const intervalRef = useRef(null);
+  const currentMovie = movies?.[currentMovieIndex];
+
+  // Caching category calls
+  const categoryCache = useRef({});
 
   useEffect(() => {
-    if (movies && movies.length > 0) {
-      const interval = setInterval(() => {
-        setIsTransitioning(true);
+    if (!movies || movies.length === 0) return;
+    // Setup interval for banner switch
+    intervalRef.current = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentMovieIndex((prevIndex) =>
+          prevIndex === movies.length - 1 ? 0 : prevIndex + 1
+        );
+        setIsTransitioning(false);
+      }, 50);
+    }, 5000);
 
-        setTimeout(() => {
-          setCurrentMovieIndex((prevIndex) =>
-            prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-          );
-          setIsTransitioning(false);
-        }, 50);
-      }, 5000);
+    return () => clearInterval(intervalRef.current);
+  }, [movies]);
 
-      return () => clearInterval(interval);
+  useEffect(() => {
+    if (currentMovie) {
+      fetchGenres(currentMovie);
     }
-  }, [movies, currentMovieIndex]);
+  }, [currentMovie]);
 
-  const getGenres = (movie) => {
-    if (!movie || !movie.genre) return "Unknown Genre";
-    if (Array.isArray(movie.genre)) {
-      return movie.genre.join(", ");
+  const fetchGenres = async (movie) => {
+    if (!movie?.categoryIds) {
+      setCurrentGenres(["Unknown"]);
+      return;
     }
-    return movie.genre;
+
+    const genreNames = await Promise.all(
+      movie.categoryIds.map(async (id) => {
+        if (categoryCache.current[id]) return categoryCache.current[id];
+        const res = await getCategoryById(id);
+        categoryCache.current[id] = res.name;
+        return res.name;
+      })
+    );
+
+    setCurrentGenres(genreNames);
   };
 
   if (!movies || movies.length === 0 || !currentMovie) {
@@ -91,21 +111,21 @@ const Banner = ({ movies }) => {
                   {/* Movie Info Tags */}
                   <div className="flex items-center justify-center lg:justify-start space-x-3 flex-wrap gap-2">
                     {currentMovie.releaseYear && (
-                      <span className="bg-transparent border-2 border-white text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
+                      <span className=" text-white font-bold border-4 border-white bg-white/30 px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
                         {currentMovie.releaseYear}
                       </span>
                     )}
-                    <span className="bg-transparent border-2 border-white text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
+                    <span className=" border-4 font-bold border-white bg-white/30 text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
                       {currentMovie.quality}
                     </span>
-                    <span className="text-white text-sm bg-white/20 px-4 py-2 rounded-full backdrop-blur-sm">
-                      {getGenres(currentMovie)}
+                    <span className="text-white text-sm font-bold border-4 border-white bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                      {currentGenres.join(", ")}
                     </span>
                   </div>
                 </div>
 
                 {/* Play Button */}
-                <div className="flex justify-center lg:justify-start">
+                <div className="flex justify-center lg:justify-start gap-4">
                   <button className="flex items-center p-5 border-2 bg-red-500 text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl">
                     <svg
                       className="w-6 h-6 transition-transform duration-300"
@@ -113,6 +133,23 @@ const Banner = ({ movies }) => {
                       viewBox="0 0 24 24"
                     >
                       <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button className="flex items-center p-5 border-2 bg-black text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl">
+                    <svg
+                      className="w-6 h-6 transition-transform duration-300"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
+             10-4.48 10-10S17.52 2 12 2zm0 17
+             c-.55 0-1-.45-1-1v-6c0-.55.45-1
+             1-1s1 .45 1 1v6c0 .55-.45 1-1 1zm0-10
+             c-.83 0-1.5-.67-1.5-1.5S11.17 6
+             12 6s1.5.67 1.5 1.5S12.83 9
+             12 9z"
+                      />
                     </svg>
                   </button>
                 </div>

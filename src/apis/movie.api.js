@@ -29,3 +29,13 @@ export const getAllHotMovies = async () => {
         throw error;
     }
 };
+export const getMovieById = async (id) => {
+    try {
+        const response = await Instance.get(`/movies/${id}`);
+        console.log(response.data)
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching movie by ${id}:`, error);
+        throw error;
+    }
+};

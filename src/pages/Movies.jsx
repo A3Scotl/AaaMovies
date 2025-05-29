@@ -78,10 +78,18 @@ function Movies() {
 
               {/* Quality badge */}
               {movie.quality && (
-                <div className="absolute top-2 left-2 bg-yellow-500 text-black text-xs px-2 py-1 rounded font-bold">
+                <div className="absolute top-2 left-2 bg-yellow-100 text-black text-xs px-2 py-1 rounded font-bold">
                   {movie.quality}
                 </div>
+                
               )}
+              {/* episodeTotal badge
+              {movie.episodeTotal >1 && (
+                <div className="absolute top-2 left-10 bg-yellow-500 text-black text-xs px-2 py-1 rounded font-bold">
+                  {movie.episodeTotal}
+                </div>
+                
+              )} */}
 
               {/* Year badge */}
               {movie.year && (

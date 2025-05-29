@@ -2,10 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white w-full hidden">
+    <footer className="bg-black text-white w-full overflow-hidden">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-10 py-12">
-
+      <div className="max-w-7x1 mx-auto px-4 lg:px-10 py-12">
         {/* Newsletter Subscription */}
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
@@ -14,11 +13,12 @@ const Footer = () => {
             <h2 className="text-2xl lg:text-3xl font-bold text-red-500 uppercase">
               AaaMovies
             </h2>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-gray-300 text-sm leading-relaxed w-[70%]">
               Your ultimate destination for unlimited entertainment. Watch the latest movies, TV shows, web series and more in high quality.
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Accusantium id sunt amet cupiditate nobis,
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-red-500 transition-colors">
+              <a href="#" className="text-gray-400  hover:text-red-500 transition-colors">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                 </svg>
@@ -54,25 +54,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="bg-gray-900 py-4">
-        <div className="max-w-7xl mx-auto px-4 lg:px-10">
-          <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-400">
-            <p>&copy; 2025 AaaMovies. All rights reserved.</p>
-            <div className="flex space-x-6 mt-2 md:mt-0">
-              <a href="#" className="hover:text-red-500 transition-colors">Privacy</a>
-              <a href="#" className="hover:text-red-500 transition-colors">Terms</a>
-              <a href="#" className="hover:text-red-500 transition-colors">Cookies</a>
-              <a href="#" className="hover:text-red-500 transition-colors">Sitemap</a>
-            </div>
-            <div className="flex items-center space-x-2 mt-2 md:mt-0">
-              <span>Made with</span>
-              <span className="text-red-500">❤</span>
-              <span>for movie lovers</span>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </footer>
   );
 };
