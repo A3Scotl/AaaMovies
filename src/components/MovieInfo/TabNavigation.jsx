@@ -9,7 +9,7 @@ const TabNavigation = ({ activeTab, onTabChange }) => {
   ];
 
   return (
-    <div className="bg-gray-800 border-b border-gray-700">
+    <div className="bg-black border-b border-gray-700">
       <div className="container mx-auto px-4">
         <div className="flex overflow-x-auto">
           {tabs.map((tab) => {
