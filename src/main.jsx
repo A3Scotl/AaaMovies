@@ -6,6 +6,7 @@ import App from './App.jsx'
 import Home from './pages/Home.jsx'
 import Movies from './pages/Movies.jsx'
 import Auth from './pages/Auth.jsx'
+import MovieInfo from './pages/MovieInfo'
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: '/movies',
         element: <Movies />
+      },
+      {
+        path: '/movie/:movieId',
+        element: <MovieInfo />
       },
       {
         path: '/auth',
