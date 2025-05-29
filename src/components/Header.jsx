@@ -150,18 +150,22 @@ const Header = () => {
           <div className="p-6 space-y-4">
             {/* Mobile Navigation */}
             <nav className="space-y-3">
-              {["Home", "Movies", "TV Shows", "Web Series"].map(
-                (item, index) => (
-                  <a
-                    key={index}
-                    href="#"
-                    className="block text-white font-medium text-lg py-2 px-4 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-all duration-300"
-                    onClick={toggleMobileMenu}
-                  >
-                    {item}
-                  </a>
-                )
-              )}
+                {[
+              { label: "Home", href: "/" },
+              { label: "Movies", href: "/movies" },
+              { label: "TV Shows", href: "/tv-shows" },
+              { label: "Web Series", href: "/web-series" },
+            ].map((item, index) => (
+               <a
+                  key={index}
+                  href={item.href}
+                  className="block text-white font-medium text-lg py-2 px-4 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-all duration-300"
+                  onClick={toggleMobileMenu}
+                >
+                  {item.label}
+                </a>
+            ))}
+          
             </nav>
 
             <hr className="border-gray-700" />
