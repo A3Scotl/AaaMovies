@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import {  getAllMovies } from "../apis/movie.api";
+import { getAllMovies } from "../apis/movie.api";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 function Movies() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const moviesPerPage = 32;
@@ -38,7 +39,16 @@ function Movies() {
       setCurrentPage(currentPage - 1);
     }
   };
-
+  const handleMovieClick = async (movie) => {
+    if (!movie.movieId) {
+      console.error("Movie ID is undefined:", movie);
+      return;
+    }
+    console.log(movie);
+    navigate(`/movie/${movie.movieId}`, {
+      state: { movie },
+    });
+  };
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -69,7 +79,7 @@ function Movies() {
             className="relative group cursor-pointer transform transition-all duration-300 hover:scale-105"
           >
             {/* Movie Poster */}
-            <div className="relative overflow-hidden rounded-lg bg-gray-800 aspect-[2/3]">
+            <div  onClick={() => handleMovieClick(movie)} className="relative overflow-hidden rounded-lg bg-gray-800 aspect-[2/3]">
               <img
                 src={movie.thumbnail}
                 alt={movie.title}
@@ -81,7 +91,6 @@ function Movies() {
                 <div className="absolute top-2 left-2 bg-yellow-100 text-black text-xs px-2 py-1 rounded font-bold">
                   {movie.quality}
                 </div>
-                
               )}
               {/* episodeTotal badge
               {movie.episodeTotal >1 && (
@@ -105,7 +114,7 @@ function Movies() {
                 {movie.title}
               </h3>
               <p className="text-xs text-gray-400 mt-1">
-                {movie.originName || 'N/A'}
+                {movie.originName || "N/A"}
               </p>
             </div>
           </div>
@@ -119,8 +128,18 @@ function Movies() {
           disabled={currentPage === 1}
           className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
 
@@ -135,8 +154,18 @@ function Movies() {
           disabled={currentPage === totalPages}
           className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>

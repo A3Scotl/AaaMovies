@@ -18,7 +18,7 @@ const TabNavigation = ({ activeTab, onTabChange }) => {
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`flex items-center gap-2 px-6 py-4 whitespace-nowrap font-medium transition-colors ${
+                className={`flex cursor-pointer items-center gap-2 px-6 py-4 whitespace-nowrap font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'text-red-500 border-b-2 border-red-500'
                     : 'text-gray-400 hover:text-white'
