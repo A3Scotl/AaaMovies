@@ -96,7 +96,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500/80 transition-all duration-300"
+              className="lg:hidden flex items-center justify-center w-10  h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500/80 transition-all duration-300"
             >
               <svg
                 className={`w-6 h-6 transition-transform duration-300 ${
