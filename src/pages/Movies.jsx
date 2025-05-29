@@ -5,7 +5,6 @@ import LoadingSpinner from "../components/LoadingSpinner";
 function Movies() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -15,14 +14,12 @@ function Movies() {
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
-        setError(null);
         const moviesData = await getAllMovies();
         setMovies(moviesData);
         setTotalPages(Math.ceil(moviesData.length / moviesPerPage));
         console.log(moviesData);
       } catch (err) {
         console.error("Error fetching movies:", err);
-        setError("Failed to load movies. Please try again.");
       } finally {
         setIsLoading(false);
       }
@@ -53,23 +50,6 @@ function Movies() {
     return (
       <div className="min-h-screen text-white py-28 px-12 flex items-center justify-center">
         <LoadingSpinner />
-      </div>
-    );
-  }
-
-  // Show error message if there's an error
-  if (error) {
-    return (
-      <div className="min-h-screen text-white py-28 px-12 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 text-xl mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
       </div>
     );
   }
