@@ -22,7 +22,7 @@ const responsive = {
   },
 };
 
-const MovieList = ({ title, movies }) => {
+const HorizontalMovieList = ({ title, movies }) => {
   const navigate = useNavigate();
   const handleMovieClick = async (movie) => {
     if (!movie.movieId) {
@@ -60,9 +60,9 @@ const MovieList = ({ title, movies }) => {
   );
 };
 
-MovieList.propTypes = {
+HorizontalMovieList.propTypes = {
   title: PropTypes.string.isRequired,
   movies: PropTypes.array.isRequired,
 };
 
-export default MovieList;
+export default HorizontalMovieList;

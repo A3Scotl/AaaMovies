@@ -12,7 +12,6 @@ export const getAllcategories = async () => {
 export const getCategoryById = async (id) => {
     try {
         const response = await Instance.get(`/categories/${id}`);
-        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error(`Error fetching category by ${id}:`, error);

@@ -6,7 +6,7 @@ import MovieHero from '../components/MovieInfo/MovieHero';
 import MovieInfoTab from '../components/MovieInfo/MovieInfoTab';
 import TabNavigation from '../components/MovieInfo/TabNavigation';
 import CommentsSection from '../components/Comment/CommentsSection';
-import LoadingSpinner from '../components/LoadingSpinner'; // đảm bảo đường dẫn đúng
+import LoadingSpinner from '../components/LoadingSpinner'; 
 
 const MovieInfo = () => {
   const location = useLocation();

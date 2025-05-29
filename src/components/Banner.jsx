@@ -2,20 +2,19 @@ import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import LoadingSpinner from "./LoadingSpinner";
 import { getCategoryById } from "../apis/category.api";
+import { useNavigate } from "react-router-dom";
 const Banner = ({ movies }) => {
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentGenres, setCurrentGenres] = useState([]);
-
+  const navigate = useNavigate();
   const intervalRef = useRef(null);
   const currentMovie = movies?.[currentMovieIndex];
 
-  // Caching category calls
   const categoryCache = useRef({});
 
   useEffect(() => {
     if (!movies || movies.length === 0) return;
-    // Setup interval for banner switch
     intervalRef.current = setInterval(() => {
       setIsTransitioning(true);
       setTimeout(() => {
@@ -52,7 +51,16 @@ const Banner = ({ movies }) => {
 
     setCurrentGenres(genreNames);
   };
-
+  const handleMovieClick = async (currentMovie) => {
+    if (!currentMovie.movieId) {
+      console.error("Movie ID is undefined:", currentMovie);
+      return;
+    }
+    console.log(currentMovie);
+    navigate(`/movie/${currentMovie.movieId}`, {
+      state: { movie: currentMovie },
+    });
+  };
   if (!movies || movies.length === 0 || !currentMovie) {
     return (
       <div
@@ -135,7 +143,10 @@ const Banner = ({ movies }) => {
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </button>
-                  <button className="flex items-center p-5 border-2 bg-black text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl">
+                  <button
+                    onClick={() => handleMovieClick(currentMovie)}
+                    className="flex items-center p-5 border-2 bg-black text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl"
+                  >
                     <svg
                       className="w-6 h-6 transition-transform duration-300"
                       fill="currentColor"
