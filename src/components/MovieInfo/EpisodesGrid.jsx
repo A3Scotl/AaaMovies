@@ -16,7 +16,7 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect }) => {
               alt={episode.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all">
+            <div className="absolute inset-0 bg-black/0 group-hover:opacity-90 flex items-center justify-center transition-all">
               <Play className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           </div>

@@ -29,7 +29,7 @@ const MovieInfo = ({ movie: movieProp }) => {
     episodes: Array.from({ length: 12 }, (_, i) => ({
       episodeId: i + 1,
       episodeNumber: i + 1,
-      title: `Tập ${i + 1}`,
+      title: `Ep ${i + 1}`,
       thumbnail: "https://img.ophim.live/uploads/movies/ngoi-truong-xac-song-thumb.jpg",
       duration: 60
     }))
@@ -37,7 +37,7 @@ const MovieInfo = ({ movie: movieProp }) => {
 
   const handleEpisodeSelect = (episode) => {
     setSelectedEpisode(episode);
-    console.log('Selected episode:', episode);
+    console.log('Selected episode:', episode.thumbnail);
   };
 
   const renderTabContent = () => {
