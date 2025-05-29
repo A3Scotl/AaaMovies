@@ -54,7 +54,7 @@ const MovieInfo = ({ movie: movieProp }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-black">
       <MovieHero movie={movie} onEpisodeSelect={handleEpisodeSelect} />
       <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
       
