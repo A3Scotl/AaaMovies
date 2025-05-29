@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import LoadingSpinner from "./LoadingSpinner";
-
+import {getMovieById} from "../apis/movie.api"
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
@@ -26,9 +26,10 @@ const responsive = {
 const MovieList = ({ title, movies }) => {
   const navigate = useNavigate();
 
-  const handleMovieClick = (movie) => {
+  const handleMovieClick = async (movie) => {
+    const data = await getMovieById(movie.movieId);
     navigate(`/movie/${movie.movieId}`, { 
-      state: { movie } 
+      state: { movie : data.data } 
     });
   };
 
