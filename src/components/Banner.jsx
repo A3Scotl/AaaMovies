@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import LoadingSpinner from "./LoadingSpinner";
+
 const Banner = ({ movies }) => {
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -118,8 +119,8 @@ const Banner = ({ movies }) => {
               </div>
             </div>
 
-            {/* Movie Poster - Right Side */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center">
+            {/* Movie Poster - Right Side - Hidden on mobile/tablet, visible only on laptop+ */}
+            <div className="hidden lg:flex w-full lg:w-1/2 items-center justify-center">
               <div className="w-[280px] h-[380px] lg:w-[320px] lg:h-[420px] relative group">
                 {/* Play button overlay */}
                 <button className="w-full h-full absolute top-0 left-0 p-2 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl z-10 cursor-pointer">
