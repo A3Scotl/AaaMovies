@@ -34,7 +34,7 @@ AAA Movies là một ứng dụng xem phim trực tuyến được xây dựng b
 ## ▶️ Cách chạy dự án local
 
 Yêu cầu: Node.js >= 14
-
+```bash
 ---
 # Clone project
 git clone https://github.com/A3Scotl/AaaMovies.git
@@ -46,6 +46,7 @@ npm install
 # Chạy project với Vite
 npm run dev
 ---
+```
 ##🧑‍💻 
 
 📧 Email: nguyentruongan0610@gmail.com
