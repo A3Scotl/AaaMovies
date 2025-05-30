@@ -51,16 +51,25 @@ const Banner = ({ movies }) => {
 
     setCurrentGenres(genreNames);
   };
-  const handleMovieClick = async (currentMovie) => {
-    if (!currentMovie.movieId) {
-      console.error("Movie ID is undefined:", currentMovie);
-      return;
-    }
-    console.log(currentMovie);
-    navigate(`/movie/${currentMovie.movieId}`, {
-      state: { movie: currentMovie },
-    });
-  };
+const handleWatchNowClick = (movie) => {
+  if (!movie.movieId) {
+    console.error("Movie ID is undefined:", movie);
+    return;
+  }
+  navigate(`/movie/${movie.movieId}`, {
+    state: { movie: movie, isWatching: true }, // Start watching immediately
+  });
+};
+
+const handleInfoClick = (movie) => {
+  if (!movie.movieId) {
+    console.error("Movie ID is undefined:", movie);
+    return;
+  }
+  navigate(`/movie/${movie.movieId}`, {
+    state: { movie: movie, isWatching: false }, // Go to info tab, not watching
+  });
+};
   if (!movies || movies.length === 0 || !currentMovie) {
     return (
       <div
@@ -134,7 +143,10 @@ const Banner = ({ movies }) => {
 
                 {/* Play Button */}
                 <div className="flex justify-center lg:justify-start gap-4">
-                  <button className="flex items-center p-5 border-2 bg-red-500 text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl">
+                  <button
+                    onClick={() => handleWatchNowClick(currentMovie)}
+                    className="flex items-center p-5 border-2 bg-red-500 text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl"
+                  >
                     <svg
                       className="w-6 h-6 transition-transform duration-300"
                       fill="currentColor"
@@ -144,7 +156,7 @@ const Banner = ({ movies }) => {
                     </svg>
                   </button>
                   <button
-                    onClick={() => handleMovieClick(currentMovie)}
+                    onClick={() => handleInfoClick(currentMovie)}
                     className="flex items-center p-5 border-2 bg-black text-white hover:bg-white hover:text-red-900 cursor-pointer transition-all duration-300 rounded-full text-base lg:text-lg font-semibold transform hover:scale-105 hover:shadow-xl"
                   >
                     <svg
@@ -154,12 +166,12 @@ const Banner = ({ movies }) => {
                     >
                       <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
-             10-4.48 10-10S17.52 2 12 2zm0 17
-             c-.55 0-1-.45-1-1v-6c0-.55.45-1
-             1-1s1 .45 1 1v6c0 .55-.45 1-1 1zm0-10
-             c-.83 0-1.5-.67-1.5-1.5S11.17 6
-             12 6s1.5.67 1.5 1.5S12.83 9
-             12 9z"
+              10-4.48 10-10S17.52 2 12 2zm0 17
+              c-.55 0-1-.45-1-1v-6c0-.55.45-1
+              1-1s1 .45 1 1v6c0 .55-.45 1-1 1zm0-10
+              c-.83 0-1.5-.67-1.5-1.5S11.17 6
+              12 6s1.5.67 1.5 1.5S12.83 9
+              12 9z"
                       />
                     </svg>
                   </button>
@@ -171,7 +183,10 @@ const Banner = ({ movies }) => {
             <div className="hidden lg:flex w-full lg:w-1/2 items-center justify-center">
               <div className="w-[280px] h-[380px] lg:w-[320px] lg:h-[420px] relative group">
                 {/* Play button overlay */}
-                <button className="w-full h-full absolute top-0 left-0 p-2 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl z-10 cursor-pointer">
+                <button
+                  onClick={() => handleWatchNowClick(currentMovie)}
+                  className="w-full h-full absolute top-0 left-0 p-2 flex items-center justify-center bg-black/10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out rounded-xl z-10 cursor-pointer"
+                >
                   <div className="w-16 h-16 lg:w-20 lg:h-20 bg-red-600 rounded-full flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 shadow-2xl">
                     <svg
                       className="w-8 h-8 lg:w-10 lg:h-10 text-white ml-1 transition-transform duration-300"

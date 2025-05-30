@@ -16,7 +16,9 @@ const MovieInfo = () => {
   const [loading, setLoading] = useState(!location.state?.movie);
   const [activeTab, setActiveTab] = useState("info");
   const [selectedEpisode, setSelectedEpisode] = useState(null);
-  const [isWatching, setIsWatching] = useState(false);
+  const [isWatching, setIsWatching] = useState(location.state?.isWatching || false);
+  
+
 
   useEffect(() => {
     if (!movie) {
@@ -42,12 +44,11 @@ const MovieInfo = () => {
         setSelectedEpisode(movie.episodes[0]);
       }
     }
-  }, [movieId, movie, selectedEpisode]); 
+  }, [movieId, movie, selectedEpisode]);
 
   const handleEpisodeSelect = (episode) => {
     setSelectedEpisode(episode);
     setIsWatching(true);
-    console.log("Selected episode:", episode);
   };
 
   const handleBackToInfo = () => {
@@ -64,7 +65,7 @@ const MovieInfo = () => {
           <EpisodesGrid
             episodes={movie.episodes}
             onEpisodeSelect={handleEpisodeSelect}
-            selectedEpisodeId={selectedEpisode?.episodeId} 
+            selectedEpisodeId={selectedEpisode?.episodeId}
           />
         );
       case "comments":

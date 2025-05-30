@@ -17,11 +17,11 @@ const Movies = () => {
   const [countriesOptions, setCountriesOptions] = useState([]);
   const [genreNameToIdMap, setGenreNameToIdMap] = useState({});
   const [countryNameToIdMap, setCountryNameToIdMap] = useState({});
-  
+
   // UI states
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   // Filter states
   const [filters, setFilters] = useState({
     year: "",
@@ -210,7 +210,7 @@ const Movies = () => {
         />
 
         {/* Results Info */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex items-center justify-between transition-opacity duration-300 ease-in-out">
           <p className="text-gray-300">
             Showing <span className="text-white font-semibold">{currentMovies.length}</span> of{" "}
             <span className="text-white font-semibold">{filteredMovies.length}</span> movies
@@ -223,13 +223,13 @@ const Movies = () => {
         </div>
 
         {/* Movies Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8 transition-all duration-300 ease-in-out">
           {currentMovies.length > 0 ? (
             currentMovies.map((movie) => (
-              <MovieItem key={movie.id} movie={movie} />
+              <MovieItem key={movie.id} movie={movie} className="transition-transform duration-300 ease-in-out hover:scale-105" />
             ))
           ) : (
-            <div className="col-span-full">
+            <div className="col-span-full transition-opacity duration-300 ease-in-out">
               <div className="text-center py-16">
                 <Film className="w-16 h-16 text-gray-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-400 mb-2">
@@ -245,7 +245,7 @@ const Movies = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 transition-opacity duration-300 ease-in-out">
             <button
               onClick={handlePrevPage}
               disabled={currentPage === 1}
@@ -254,7 +254,7 @@ const Movies = () => {
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-3 px-4 py-3 bg-gray-800 rounded-lg">
+            <div className="flex items-center gap-3 px-4 py-3 bg-gray-800 rounded-lg transition-all duration-200">
               <span className="text-white font-medium">{currentPage}</span>
               <span className="text-gray-400">/</span>
               <span className="text-white font-medium">{totalPages}</span>
