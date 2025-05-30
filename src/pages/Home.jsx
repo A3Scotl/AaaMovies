@@ -18,43 +18,54 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { showError, showSuccess, showInfo } = useToast();
+  const { showInfo } = useToast();
 
-  // Fetch all movie data
   useEffect(() => {
     const controller = new AbortController();
+
     const fetchAllMovieData = async () => {
+      setIsLoading(true);
+      setError(null);
+
       try {
         showInfo("Loading latest movies...", 3000);
-        setIsLoading(true);
-        setError(null);
 
-        const [
-          hotMoviesData,
-          newMoviesData,
-          singleMoviesData,
-          serieMoviesData,
-        ] = await Promise.all([
-          getAllHotMovies({ signal: controller.signal }),
-          getAllNewMovies({ signal: controller.signal }),
-          getAllSingleMovies({ signal: controller.signal }),
-          getAllSerieMovies({ signal: controller.signal }),
-        ]);
-
-        setHotMovies(hotMoviesData || []);
-        setNewMovies(newMoviesData || []);
-        setSingleMovies(singleMoviesData || []);
-        setSerieMovies(serieMoviesData || []);
-
-        // showSuccess("Movies loaded successfully!", 3000);
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error("Error fetching movies for Home page:", err);
-          const errorMessage =
-            "We're sorry, our servers are currently unavailable. Please try again later.";
-          setError(errorMessage);
-          // showError("Loading failed!", 3000);
+        // Fetch hot movies
+        try {
+          const hot = await getAllHotMovies({ signal: controller.signal });
+          setHotMovies(hot || []);
+        } catch (err) {
+          console.error("Error fetching hot movies:", err);
         }
+
+        // Fetch new movies
+        try {
+          const fresh = await getAllNewMovies({ signal: controller.signal });
+          setNewMovies(fresh || []);
+        } catch (err) {
+          console.error("Error fetching new movies:", err);
+        }
+
+        // Fetch single movies
+        try {
+          const singles = await getAllSingleMovies({
+            signal: controller.signal,
+          });
+          setSingleMovies(singles || []);
+        } catch (err) {
+          console.error("Error fetching single movies:", err);
+        }
+
+        // Fetch serie movies
+        try {
+          const series = await getAllSerieMovies({ signal: controller.signal });
+          setSerieMovies(series || []);
+        } catch (err) {
+          console.error("Error fetching series movies:", err);
+        }
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        setError("Unexpected error occurred while loading movies.");
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +73,7 @@ const Home = () => {
 
     fetchAllMovieData();
     return () => controller.abort();
-  }, [showError, showSuccess, showInfo]);
+  }, [showInfo]);
 
   const renderMovieLists = useCallback(() => {
     const hasData =

@@ -1,12 +1,50 @@
-# React + Vite
+# 🎬 AAA Movies
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AAA Movies là một ứng dụng xem phim trực tuyến được xây dựng bằng **ReactJS**, **Vite**, và **TailwindCSS**. Ứng dụng kết nối với backend API đã triển khai sẵn trên **Render**, và được deploy frontend trên **Vercel**.
 
-Currently, two official plugins are available:
+## 🚀 Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🌐 Website chính thức: [https://aaa-movies.vercel.app](https://aaa-movies.vercel.app)
+- 🛠️ API server: [https://aaamovies.onrender.com/api](https://aaamovies.onrender.com/api)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Công nghệ sử dụng
+
+- ⚛️ ReactJS
+- ⚡ Vite (build tool)
+- 💨 TailwindCSS (UI utility)
+- 🌐 Axios (gọi API)
+- 🛠 Render (host backend)
+- 🚀 Vercel (host frontend)
+
+---
+## 📺 Một số trang
+![Home Page](./screenshots/home-page.png)
+![Movies](./screenshots/all-movie-page.png)
+![Movie Detail](./screenshots/detail-page.png)
+![Play Page](./screenshots/play-page.png)
+![Search Movies](./screenshots/search.png)
+ 
+## ▶️ Cách chạy dự án local
+
+Yêu cầu: Node.js >= 14
+
+```bash
+# Clone project
+git clone https://github.com/A3Scotl/AaaMovies.git
+cd AaaMovies
+
+# Cài dependencies
+npm install
+
+# Chạy project với Vite
+npm run dev
+
+🧑‍💻 Tác giả
+
+📧 Email: nguyentruongan0610@gmail.com
+
+🏫 Trường/Đơn vị: [Industrial University of HCM City]
+
+

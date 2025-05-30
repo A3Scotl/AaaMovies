@@ -71,28 +71,6 @@ const HorizontalMovieList = ({ title, movies }) => {
         {title}
       </h2>
       
-      <style jsx global>{`
-        .movie-slider .slick-slide {
-          padding: 0 4px;
-          transition: all 0.3s ease;
-        }
-        
-        .movie-slider .slick-track {
-          display: flex;
-          align-items: center;
-        }
-        
-        .movie-slider .slick-slide > div {
-          height: 100%;
-        }
-        
-        .movie-slider .slick-prev,
-        .movie-slider .slick-next {
-          display: none !important;
-        }
-        
-      `}</style>
-      
       <div className="movie-slider">
         <Slider {...settings}>
           {movies.map((movie) => (
