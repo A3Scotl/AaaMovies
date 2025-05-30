@@ -30,7 +30,7 @@ const Header = () => {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-1000 transition-all duration-500 ease-out ${
           isScrolled
             ? "bg-black/95 backdrop-blur-md shadow-2xl border-b border-red-500/20"
             : "bg-gradient-to-b from-black/60 via-black/40 to-transparent backdrop-blur-sm"
@@ -49,8 +49,9 @@ const Header = () => {
             {[
               { label: "Home", href: "/" },
               { label: "Movies", href: "/movies" },
+
+              { label: "Series", href: "/series" },
               { label: "TV Shows", href: "/tv-shows" },
-              { label: "Web Series", href: "/web-series" },
             ].map((item, index) => (
               <a
                 key={index}
@@ -150,13 +151,14 @@ const Header = () => {
           <div className="p-6 space-y-4">
             {/* Mobile Navigation */}
             <nav className="space-y-3">
-                {[
-              { label: "Home", href: "/" },
-              { label: "Movies", href: "/movies" },
-              { label: "TV Shows", href: "/tv-shows" },
-              { label: "Web Series", href: "/web-series" },
-            ].map((item, index) => (
-               <a
+              {[
+                { label: "Home", href: "/" },
+                { label: "Movies", href: "/movies" },
+
+                { label: "Series", href: "/series" },
+                { label: "TV Shows", href: "/tv-shows" },
+              ].map((item, index) => (
+                <a
                   key={index}
                   href={item.href}
                   className="block text-white font-medium text-lg py-2 px-4 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-all duration-300"
@@ -164,8 +166,7 @@ const Header = () => {
                 >
                   {item.label}
                 </a>
-            ))}
-          
+              ))}
             </nav>
 
             <hr className="border-gray-700" />

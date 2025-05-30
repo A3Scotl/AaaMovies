@@ -9,6 +9,24 @@ export const getAllMovies = async () => {
         throw error;
     }
 };
+export const getAllSingleMovies = async () => {
+    try {
+        const response = await Instance.get('/movies/singles');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all single movies:', error);
+        throw error;
+    }
+};
+export const getAllSerieMovies = async () => {
+    try {
+        const response = await Instance.get('/movies/series');
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all serie movies:', error);
+        throw error;
+    }
+};
 
 export const getAllNewMovies = async () => {
     try {
