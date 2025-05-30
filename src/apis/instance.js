@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL
- = "";
-//  "https://aaamovies.onrender.com/api";
+ = "https://aaamovies.onrender.com/api";
 const Instance = axios.create({
   baseURL: API_BASE_URL||"http://localhost:8080/api",
   timeout: 30000,
@@ -10,5 +9,4 @@ const Instance = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
 export default Instance;
