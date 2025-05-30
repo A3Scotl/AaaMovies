@@ -5,7 +5,7 @@ AAA Movies là một ứng dụng xem phim trực tuyến được xây dựng b
 ## 🚀 Demo
 
 - 🌐 Website chính thức: [https://aaa-movies.vercel.app](https://aaa-movies.vercel.app)
-- 🛠️ API server: [https://aaamovies.onrender.com/api](https://aaamovies.onrender.com/api)
+- 🛠️ API server: [https://aaamovies.onrender.com/api/movies](https://aaamovies.onrender.com/api/movies)
 
 ---
 
