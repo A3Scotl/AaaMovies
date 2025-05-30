@@ -97,7 +97,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMobileMenu}
-              className="lg:hidden flex items-center justify-center w-10  h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500/80 transition-all duration-300"
+              className="lg:hidden cursor-pointer flex items-center justify-center w-10  h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-red-500/80 transition-all duration-300"
             >
               <svg
                 className={`w-6 h-6 transition-transform duration-300 ${
@@ -136,19 +136,19 @@ const Header = () => {
       >
         {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/80 backdrop-blur-sm "
           onClick={toggleMobileMenu}
         ></div>
 
         {/* Menu Content */}
         <div
-          className={`absolute top-20 right-4 w-64 bg-gray-900/95 backdrop-blur-md rounded-2xl border border-red-500/20 shadow-2xl transform transition-all duration-500 ${
+          className={`absolute  top-20 right-4 w-64 bg-gray-900/95 backdrop-blur-md rounded-2xl border border-red-500/20 shadow-2xl transform transition-all duration-500 ${
             isMobileMenuOpen
               ? "translate-x-0 scale-100"
               : "translate-x-full scale-95"
           }`}
         >
-          <div className="p-6 space-y-4">
+          <div className="p-6 space-y-4 ">
             {/* Mobile Navigation */}
             <nav className="space-y-3">
               {[
@@ -169,7 +169,7 @@ const Header = () => {
               ))}
             </nav>
 
-            <hr className="border-gray-700" />
+            <hr className="border-gray-700 " />
 
             {/* Mobile Actions */}
             <div className="space-y-3 cursor-pointer">

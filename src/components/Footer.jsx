@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white w-full overflow-hidden">
       {/* Main Footer Content */}
-      <div className="max-w-7x1 mx-auto px-4 lg:px-10 py-12">
+      <div className="max-w-7x1 ml-4 mx-auto px-4 lg:px-10 py-12">
         {/* Newsletter Subscription */}
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
@@ -38,13 +38,13 @@ const Footer = () => {
               </a>
             </div>
           </div>
-            <div className="flex w-full lg:w-auto max-w-md">
+            <div className="flex w-full lg:w-auto max-w-md mr-8">
               <input
                 type="email"
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
-              <button className="px-6 py-2 bg-red-600 text-white font-semibold rounded-r-lg hover:bg-red-700 transition-colors">
+              <button className="px-4 py-2 bg-red-600 text-white font-semibold rounded-r-lg hover:bg-red-700 transition-colors">
                 Subscribe
               </button>
             </div>

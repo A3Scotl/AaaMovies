@@ -1,57 +1,63 @@
 import PropTypes from "prop-types";
 import Slider from "react-slick";
 import { Play, Pause } from "lucide-react";
+import {
+  CustomNextArrow,
+  CustomPrevArrow,
+} from "../CustomArrow/useCustomArrow";
 
 const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
   const settings = {
     dots: false,
     infinite: false,
-    speed: 500,
-    slidesToScroll: 1,
+    speed: 300,
+    slidesToScroll: 2,
     autoplay: false,
-    centerMode: true,
-    centerPadding: '40px',
+    // centerMode: true,
+    centerPadding: "40px",
     initialSlide: 0,
-    lazyLoad: 'ondemand',
+    lazyLoad: "ondemand",
     swipeToSlide: true,
+    prevArrow: <CustomPrevArrow />,
+    nextArrow: <CustomNextArrow />,
 
     responsive: [
       {
         breakpoint: 4000,
         settings: {
-          slidesToShow: 6,
-          centerPadding: '60px',
-        }
+          slidesToShow: 9,
+          centerPadding: "60px",
+        },
       },
       {
         breakpoint: 3000,
         settings: {
-          slidesToShow: 5,
-          centerPadding: '50px',
-        }
+          slidesToShow: 7,
+          centerPadding: "50px",
+        },
       },
       {
         breakpoint: 1200,
         settings: {
-          slidesToShow: 4,
-          centerPadding: '40px',
-        }
+          slidesToShow: 5,
+          centerPadding: "40px",
+        },
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 3,
-          centerPadding: '30px',
-        }
+          centerPadding: "30px",
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          centerPadding: '20%',
-        }
-      }
-    ]
+          centerPadding: "20%",
+        },
+      },
+    ],
   };
 
   return (
@@ -64,7 +70,7 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
             <div key={episode.episodeId} className="px-2">
               <button
                 onClick={() => onEpisodeSelect(episode)}
-                className={`group rounded-lg overflow-hidden transition-all duration-300 w-full h-full block
+                className={`group  rounded-lg overflow-hidden transition-all duration-300 w-full h-full block
                   ${
                     isSelected
                       ? "bg-gray-600 scale-100 ring-2 ring-red-500"
@@ -72,7 +78,7 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
                   }
                 `}
               >
-                <div className="relative aspect-video">
+                <div className="relative cursor-pointer aspect-video">
                   <img
                     src={episode.thumbnail}
                     alt={episode.title}
@@ -110,7 +116,7 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
                     {episode.title}
                   </h3>
                   <p className="text-gray-400 text-xs">
-                    {episode.duration} phút
+                    {episode.duration} minius
                   </p>
                 </div>
               </button>
