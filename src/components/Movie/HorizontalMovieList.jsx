@@ -1,68 +1,64 @@
+// HorizontalMovieList.jsx
+import React from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+
+// Assuming MovieItem is now imported from its dedicated file
+import MovieItem from "./MovieItem"; // Adjust the path if MovieItem is in a different directory relative to HorizontalMovieList
+
 const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
-    items: 2,
+    items: 6, // Adjusted to 6 for consistency with other breakpoints for movies
   },
   desktop: {
     breakpoint: { max: 3000, min: 1200 },
     items: 6,
   },
   tablet: {
-    breakpoint: { max: 1200, min: 600 },
+    breakpoint: { max: 1200, min: 768 }, // Added a larger tablet breakpoint
+    items: 4,
+  },
+  smallTablet: { // Added a smaller tablet breakpoint
+    breakpoint: { max: 768, min: 480 },
     items: 3,
   },
   mobile: {
-    breakpoint: { max: 600, min: 0 },
+    breakpoint: { max: 480, min: 0 }, // Adjusted mobile breakpoint
     items: 2,
   },
 };
 
-const CarouselMovieItem = ({ movie }) => {
-  const navigate = useNavigate();
-
-  const handleMovieClick = () => {
-    if (!movie.movieId) {
-      console.error("Movie ID is undefined:", movie);
-      return;
-    }
-    navigate(`/movie/${movie.movieId}`, {
-      state: { movie },
-    });
-  };
-
-  return (
-    <div
-      onClick={handleMovieClick}
-      className="bg-cover bg-no-repeat bg-center w-[200px] h-[300px] relative hover:scale-110 transition-transform duration-500 ease-in-out cursor-pointer mx-2"
-      style={{
-        backgroundImage: `url(${movie.thumbnail})`,
-      }}
-    >
-      <div className="bg-black w-full h-full opacity-40 absolute top-0 left-0 z-0" />
-      <div className="relative p-4 flex flex-col items-center justify-end h-full text-white">
-        <h3 className="text-md font-bold uppercase text-center">
-          {movie.title}
-        </h3>
-      </div>
-    </div>
-  );
-};
-
-CarouselMovieItem.propTypes = {
-  movie: PropTypes.object.isRequired,
-};
-
 const HorizontalMovieList = ({ title, movies }) => {
   return (
-    <div className="my-10 px-10 max-w-full bg-black p-3">
-      <h2 className="text-xl uppercase mb-4 text-white">{title}</h2>
-      <Carousel responsive={responsive} draggable={false}>
+    <div className="my-10 px-4 sm:px-6 lg:px-10 max-w-full bg-black py-3"> {/* Adjusted padding */}
+      <h2 className="text-2xl font-bold uppercase mb-6 text-white px-2"> {/* Increased font size and padding */}
+        {title}
+      </h2>
+      <Carousel
+        responsive={responsive}
+        draggable={false}
+        // Optional: Add more props for better carousel behavior
+        infinite={true}
+        autoPlay={false} // Set to true if you want auto-play
+        keyBoardControl={true}
+        customTransition="all .5s ease-in-out"
+        transitionDuration={500}
+        containerClass="carousel-container" // Add a class for custom styling if needed
+        itemClass="carousel-item-padding-40-px" // For spacing between items
+      >
         {movies.map((movie) => (
-          <CarouselMovieItem key={movie.movieId} movie={movie} />
+          <div key={movie.movieId} className="px-2"> {/* Added padding for spacing */}
+            <MovieItem
+              movie={movie}
+              // Here, we provide specific sizing/layout for carousel items
+              // The default MovieItem styling should be generic enough
+              // that these additional classes adapt it for the carousel.
+              // For example, if MovieItem has max-width, it will constrain itself.
+              // If not, you might need to add specific width classes here.
+            />
+          </div>
         ))}
       </Carousel>
     </div>

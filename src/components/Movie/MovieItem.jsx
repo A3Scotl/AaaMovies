@@ -20,7 +20,7 @@ function MovieItem({ movie }) {
       onClick={handleMovieClick}
       className="relative group cursor-pointer transform transition-all duration-300 hover:scale-105"
     >
-      {/* Movie Poster */}
+      {/* Movie Poster Container */}
       <div className="relative overflow-hidden rounded-lg bg-gray-800 aspect-[2/3]">
         <img
           src={movie.thumbnail}
@@ -28,16 +28,20 @@ function MovieItem({ movie }) {
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
 
+        {/* --- Black Overlay Added Here --- */}
+        {/* This div creates a semi-transparent black layer over the image */}
+        <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+
         {/* Quality badge */}
         {movie.quality && (
-          <div className="absolute top-2 left-2 bg-yellow-100 text-black text-xs px-2 py-1 rounded font-bold">
+          <div className="absolute top-2 left-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded font-bold z-10"> {/* z-10 to ensure it's above overlay */}
             {movie.quality}
           </div>
         )}
 
         {/* Year badge */}
         {movie.releaseYear && (
-          <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
+          <div className="absolute top-2 font-bold right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded z-10"> {/* z-10 to ensure it's above overlay */}
             {movie.releaseYear}
           </div>
         )}
@@ -60,13 +64,12 @@ function MovieItem({ movie }) {
 
 MovieItem.propTypes = {
   movie: PropTypes.shape({
-    movieId: PropTypes.string, 
+    movieId: PropTypes.string,
     thumbnail: PropTypes.string,
     title: PropTypes.string.isRequired,
     quality: PropTypes.string,
-    releaseYear: PropTypes.number, 
+    releaseYear: PropTypes.number,
     originName: PropTypes.string,
-
   }).isRequired,
 };
 
