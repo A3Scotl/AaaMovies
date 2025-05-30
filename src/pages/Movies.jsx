@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { getAllMovies } from "../apis/movie.api";
 import { getAllCategories } from "../apis/category.api";
 import { getAllCountries } from "../apis/country.api";
 import LoadingSpinner from "../components/LoadingSpinner";
 import MovieItem from "../components/Movie/MovieItem";
 import MovieFilter from "../components/Movie/MovieFilter";
-import { ChevronLeft, ChevronRight, Film } from "lucide-react";
+import { Film } from "lucide-react"; 
 
-const MOVIES_PER_PAGE = 24;
+const INITIAL_MOVIES_TO_LOAD = 8; 
+const MOVIES_LOAD_CHUNK = 8; 
 const MOVIE_TYPES = ["SINGLE", "SERIES"];
 
 const Movies = () => {
@@ -20,7 +21,8 @@ const Movies = () => {
 
   // UI states
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [displayCount, setDisplayCount] = useState(INITIAL_MOVIES_TO_LOAD); 
+  const [isFetchingMore, setIsFetchingMore] = useState(false); 
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -28,8 +30,11 @@ const Movies = () => {
     type: "",
     genre: "",
     country: "",
-    sortOrder: "newest"
+    sortOrder: "newest",
   });
+
+  // Ref for the "loader" element to observe for infinite scrolling
+  const loader = useRef(null);
 
   // Fetch initial data
   useEffect(() => {
@@ -93,7 +98,7 @@ const Movies = () => {
           (movie) => movie.categoryIds && movie.categoryIds.includes(selectedGenreId)
         );
       } else {
-        result = [];
+        result = []; 
       }
     }
 
@@ -135,15 +140,12 @@ const Movies = () => {
     return result;
   }, [movies, filters, genreNameToIdMap, countryNameToIdMap]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE);
+  // Movies currently displayed based on displayCount
   const currentMovies = useMemo(() => {
-    const startIndex = (currentPage - 1) * MOVIES_PER_PAGE;
-    const endIndex = startIndex + MOVIES_PER_PAGE;
-    return filteredMovies.slice(startIndex, endIndex);
-  }, [filteredMovies, currentPage]);
+    return filteredMovies.slice(0, displayCount);
+  }, [filteredMovies, displayCount]);
 
-  // Get available years
+  // Get available years for filters
   const availableYears = useMemo(() => {
     return [...new Set(movies.map((movie) => movie.releaseYear).filter(Boolean))]
       .sort((a, b) => b - a);
@@ -151,11 +153,11 @@ const Movies = () => {
 
   // Handle filter changes
   const handleFilterChange = (filterType, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [filterType]: value
+      [filterType]: value,
     }));
-    setCurrentPage(1); // Reset to first page when filters change
+    setDisplayCount(INITIAL_MOVIES_TO_LOAD);
   };
 
   // Clear all filters
@@ -165,23 +167,52 @@ const Movies = () => {
       type: "",
       genre: "",
       country: "",
-      sortOrder: "newest"
+      sortOrder: "newest",
     });
-    setCurrentPage(1);
+    setDisplayCount(INITIAL_MOVIES_TO_LOAD); 
   };
 
-  // Pagination handlers
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  // Callback for IntersectionObserver to load more movies
+  const loadMore = useCallback(() => {
+    if (isFetchingMore || displayCount >= filteredMovies.length) return; 
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
+    setIsFetchingMore(true);
+    // Simulate API call delay for smoother UX, then update displayCount
+    setTimeout(() => {
+      setDisplayCount((prevCount) =>
+        Math.min(prevCount + MOVIES_LOAD_CHUNK, filteredMovies.length)
+      );
+      setIsFetchingMore(false);
+    }, 500); // Adjust delay as needed
+  }, [displayCount, filteredMovies.length, isFetchingMore]);
+
+
+  // Set up Intersection Observer
+  useEffect(() => {
+    if (!loader.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLoading) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "200px", 
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(loader.current);
+
+    return () => {
+      if (loader.current) {
+        observer.unobserve(loader.current);
+      }
+    };
+  }, [isLoading, loadMore]); 
+
 
   // Loading state
   if (isLoading) {
@@ -193,9 +224,8 @@ const Movies = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white py-20">
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white py-20 ">
       <div className="w-[90vw] mx-auto">
-
         {/* Filter Component */}
         <MovieFilter
           filters={filters}
@@ -205,31 +235,36 @@ const Movies = () => {
             availableYears,
             movieTypes: MOVIE_TYPES,
             genresOptions,
-            countriesOptions
+            countriesOptions,
           }}
         />
 
-        {/* Results Info */}
+        {/* Results Info - Added transition */}
         <div className="mb-6 flex items-center justify-between transition-opacity duration-300 ease-in-out">
           <p className="text-gray-300">
             Showing <span className="text-white font-semibold">{currentMovies.length}</span> of{" "}
             <span className="text-white font-semibold">{filteredMovies.length}</span> movies
           </p>
-          {totalPages > 1 && (
-            <p className="text-gray-400">
-              Page {currentPage} of {totalPages}
-            </p>
-          )}
         </div>
 
         {/* Movies Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8 transition-all duration-300 ease-in-out">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8">
           {currentMovies.length > 0 ? (
-            currentMovies.map((movie) => (
-              <MovieItem key={movie.id} movie={movie} className="transition-transform duration-300 ease-in-out hover:scale-105" />
-            ))
+            <div
+              key={`${filters.year}-${filters.type}-${filters.genre}-${filters.country}-${filters.sortOrder}`}
+              className="contents transition-opacity duration-500 ease-in-out opacity-100"
+            >
+              {currentMovies.map((movie) => (
+                <MovieItem
+                  key={movie.id}
+                  movie={movie}
+                  className="transition-transform duration-300 ease-in-out hover:scale-105"
+                />
+              ))}
+            </div>
           ) : (
-            <div className="col-span-full transition-opacity duration-300 ease-in-out">
+            // "No movies found" message also gets a transition
+            <div className="col-span-full transition-opacity duration-300 ease-in-out opacity-100">
               <div className="text-center py-16">
                 <Film className="w-16 h-16 text-gray-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-gray-400 mb-2">
@@ -243,32 +278,18 @@ const Movies = () => {
           )}
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-4 transition-opacity duration-300 ease-in-out">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800 transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-
-            <div className="flex items-center gap-3 px-4 py-3 bg-gray-800 rounded-lg transition-all duration-200">
-              <span className="text-white font-medium">{currentPage}</span>
-              <span className="text-gray-400">/</span>
-              <span className="text-white font-medium">{totalPages}</span>
-            </div>
-
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800 transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+        {/* Infinite Scroll Loader / Loading indicator */}
+        {currentMovies.length < filteredMovies.length && (
+          <div ref={loader} className="py-8 text-center">
+            {isFetchingMore ? (
+              <LoadingSpinner />
+            ) : (
+              <p className="text-gray-400">Scroll to load more...</p>
+            )}
           </div>
         )}
+
+        {/* Removed traditional pagination buttons */}
       </div>
     </div>
   );

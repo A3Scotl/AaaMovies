@@ -36,7 +36,7 @@ function MovieItem({ movie }) {
         )}
 
         {/* Year badge */}
-        {movie.year && (
+        {movie.releaseYear && (
           <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
             {movie.releaseYear}
           </div>
@@ -45,9 +45,11 @@ function MovieItem({ movie }) {
 
       {/* Movie Info */}
       <div className="mt-2">
+        {/* Line clamping for title to prevent overflow */}
         <h3 className="text-sm font-medium text-white line-clamp-2 group-hover:text-red-400 transition-colors">
           {movie.title}
         </h3>
+        {/* Display original name, fall back to "N/A" if not available */}
         <p className="text-xs text-gray-400 mt-1">
           {movie.originName || "N/A"}
         </p>
@@ -57,7 +59,15 @@ function MovieItem({ movie }) {
 }
 
 MovieItem.propTypes = {
-  movie: PropTypes.object.isRequired,
+  movie: PropTypes.shape({
+    movieId: PropTypes.string, 
+    thumbnail: PropTypes.string,
+    title: PropTypes.string.isRequired,
+    quality: PropTypes.string,
+    releaseYear: PropTypes.number, 
+    originName: PropTypes.string,
+
+  }).isRequired,
 };
 
 export default MovieItem;
