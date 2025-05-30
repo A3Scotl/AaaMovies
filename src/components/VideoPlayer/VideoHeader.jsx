@@ -3,8 +3,8 @@ import { ArrowLeft} from 'lucide-react';
 
 const VideoHeader = ({ episode, onBack }) => {
   return (
-    <div className="absolute top-16 left-0 right-0 z-50 bg-gradient-to-b from-black/80 to-transparent p-4">
-      <div className="flex items-center justify-between">
+    <div className="absolute top-16 left-4 right-12 z-50 bg-gradient-to-b from-black/80 to-transparent p-4">
+      <div className="flex items-start justify-between">
         {/* Back Button */}
         <button
           onClick={onBack}
@@ -15,8 +15,8 @@ const VideoHeader = ({ episode, onBack }) => {
         </button>
 
         {/* Episode Info */}
-        <div className="text-center text-white">
-          <h3 className="font-bold text-lg text-end">{episode.title}</h3>
+        <div className="text-center text-white ">
+          <h3 className="font-bold text-lg text-end w-50 ">{episode.title}</h3>
           <p className="text-gray-300 text-sm text-end">{episode.duration} minutes</p>
         </div>
 

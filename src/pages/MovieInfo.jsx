@@ -84,10 +84,8 @@ const MovieInfo = () => {
           onEpisodeSelect={handleEpisodeSelect}
           allEpisodes={movie.episodes}
         />
-        {/* Only show tabs if there are other episodes or info to display */}
-        {movie.episodes?.length > 1 || activeTab !== "episodes" ? (
-          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
-        ) : null}
+              <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+
 
         <div className="container mx-auto px-4 py-8">{renderTabContent()}</div>
       </>
