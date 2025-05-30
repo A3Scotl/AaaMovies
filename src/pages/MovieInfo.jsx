@@ -26,6 +26,9 @@ const MovieInfo = () => {
           const res = await fetch(`/api/movies/${movieId}`);
           const data = await res.json();
           setMovie(data);
+          if (data.episodes && data.episodes.length > 0) {
+            setSelectedEpisode(data.episodes[0]);
+          }
         } catch (err) {
           console.error("Error fetching movie:", err);
         } finally {
@@ -33,8 +36,13 @@ const MovieInfo = () => {
         }
       };
       fetchMovie();
+    } else {
+
+      if (!selectedEpisode && movie.episodes && movie.episodes.length > 0) {
+        setSelectedEpisode(movie.episodes[0]);
+      }
     }
-  }, [movieId, movie]);
+  }, [movieId, movie, selectedEpisode]); 
 
   const handleEpisodeSelect = (episode) => {
     setSelectedEpisode(episode);
@@ -44,7 +52,7 @@ const MovieInfo = () => {
 
   const handleBackToInfo = () => {
     setIsWatching(false);
-    setSelectedEpisode(null);
+
   };
 
   const renderTabContent = () => {
@@ -56,6 +64,7 @@ const MovieInfo = () => {
           <EpisodesGrid
             episodes={movie.episodes}
             onEpisodeSelect={handleEpisodeSelect}
+            selectedEpisodeId={selectedEpisode?.episodeId} 
           />
         );
       case "comments":
@@ -74,7 +83,11 @@ const MovieInfo = () => {
           onEpisodeSelect={handleEpisodeSelect}
           allEpisodes={movie.episodes}
         />
-        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        {/* Only show tabs if there are other episodes or info to display */}
+        {movie.episodes?.length > 1 || activeTab !== "episodes" ? (
+          <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+        ) : null}
+
         <div className="container mx-auto px-4 py-8">{renderTabContent()}</div>
       </>
     );
