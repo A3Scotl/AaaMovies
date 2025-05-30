@@ -3,7 +3,7 @@ import Banner from "../components/Banner";
 import HorizontalMovieList from "../components/Movie/HorizontalMovieList";
 import { getAllNewMovies, getAllHotMovies, getAllSerieMovies, getAllSingleMovies } from "../apis/movie.api";
 import LoadingSpinner from "../components/LoadingSpinner";
-import toast, { Toaster } from 'react-hot-toast'; // Import toast and Toaster
+import toast, { Toaster } from 'react-hot-toast'; 
 
 function Home() {
   const [hotMovies, setHotMovies] = useState([]);
@@ -17,7 +17,6 @@ function Home() {
       try {
         setIsLoading(true);
 
-        // Use Promise.all to fetch all movie types concurrently
         const [hotMoviesData, newMoviesData, singleMoviesData, serieMoviesData] =
           await Promise.all([
             getAllHotMovies(),
@@ -26,7 +25,6 @@ function Home() {
             getAllSerieMovies(),
           ]);
 
-        // Update states after all data is fetched
         setHotMovies(hotMoviesData);
         setNewMovies(newMoviesData);
         setSingleMovies(singleMoviesData);
@@ -34,7 +32,6 @@ function Home() {
 
       } catch (err) {
         console.error("Error fetching movies for Home page:", err);
-        // --- Use react-hot-toast to report the error ---
         toast.error("Failed to load movie data. Please try again later.");
       } finally {
         setIsLoading(false);
@@ -44,7 +41,6 @@ function Home() {
     fetchAllMovieData();
   }, []);
 
-  // --- Add a conditional class for content transition ---
   const contentClasses = `
     bg-black min-h-screen
     ${isLoading ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}
@@ -53,17 +49,17 @@ function Home() {
 
   if (isLoading) {
     return (
-      // When loading, just show the spinner. The main content will fade in once loaded.
+     
       <div className="flex items-center justify-center min-h-screen bg-black">
         <LoadingSpinner />
-        <Toaster /> {/* Toaster component should be rendered somewhere in your app */}
+        <Toaster /> 
       </div>
     );
   }
 
   return (
-    <div className={contentClasses}> {/* Apply transition classes here */}
-      <Toaster /> {/* Toaster component should be rendered somewhere in your app, often at the root */}
+    <div className={contentClasses}>
+      <Toaster /> 
       {hotMovies.length > 0 && <Banner movies={hotMovies.slice(10, 15)} />}
       {newMovies.length > 0 && <HorizontalMovieList title="New Movies" movies={newMovies.slice(0, 10)} />}
       {hotMovies.length > 0 && <HorizontalMovieList title="Hot Movies" movies={hotMovies.slice(0, 10)} />}

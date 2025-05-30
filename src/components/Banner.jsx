@@ -1,76 +1,103 @@
 import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "./LoadingSpinner"; 
 import { getCategoryById } from "../apis/category.api";
 import { useNavigate } from "react-router-dom";
+
 const Banner = ({ movies }) => {
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentGenres, setCurrentGenres] = useState([]);
+  const [isLoadingGenres, setIsLoadingGenres] = useState(false);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
-  const currentMovie = movies?.[currentMovieIndex];
-
   const categoryCache = useRef({});
 
+  
+  const [isBannerReady, setIsBannerReady] = useState(false);
+
+  // Lấy phim hiện tại từ mảng movies
+  const currentMovie = movies?.[currentMovieIndex];
+
   useEffect(() => {
-    if (!movies || movies.length === 0) return;
-    intervalRef.current = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentMovieIndex((prevIndex) =>
-          prevIndex === movies.length - 1 ? 0 : prevIndex + 1
-        );
-        setIsTransitioning(false);
-      }, 50);
-    }, 5000);
+    if (movies && movies.length > 0) {
+      clearInterval(intervalRef.current);
+
+      intervalRef.current = setInterval(() => {
+        setIsTransitioning(true); 
+        setTimeout(() => {
+          setCurrentMovieIndex((prevIndex) =>
+            prevIndex === movies.length - 1 ? 0 : prevIndex + 1
+          );
+          setIsTransitioning(false);
+        }, 500);
+      }, 5000); 
+
+    
+      setIsBannerReady(true);
+    } else {
+      clearInterval(intervalRef.current);
+      setIsBannerReady(false);
+    }
 
     return () => clearInterval(intervalRef.current);
-  }, [movies]);
+  }, [movies]); 
 
   useEffect(() => {
     if (currentMovie) {
       fetchGenres(currentMovie);
     }
-  }, [currentMovie]);
+  }, [currentMovie]); 
 
   const fetchGenres = async (movie) => {
-    if (!movie?.categoryIds) {
+    setIsLoadingGenres(true); 
+    if (!movie?.categoryIds || movie.categoryIds.length === 0) {
       setCurrentGenres(["Unknown"]);
+      setIsLoadingGenres(false);
       return;
     }
 
     const genreNames = await Promise.all(
       movie.categoryIds.map(async (id) => {
-        if (categoryCache.current[id]) return categoryCache.current[id];
-        const res = await getCategoryById(id);
-        categoryCache.current[id] = res.name;
-        return res.name;
+        if (categoryCache.current[id]) {
+          return categoryCache.current[id];
+        }
+        try {
+          const res = await getCategoryById(id);
+          categoryCache.current[id] = res.name;
+          return res.name;
+        } catch (error) {
+          console.error(`Failed to fetch category with ID ${id}:`, error);
+          return "Unknown"; // Trả về "Unknown" nếu có lỗi tải
+        }
       })
     );
-
     setCurrentGenres(genreNames);
+    setIsLoadingGenres(false); // Kết thúc tải thể loại
   };
-const handleWatchNowClick = (movie) => {
-  if (!movie.movieId) {
-    console.error("Movie ID is undefined:", movie);
-    return;
-  }
-  navigate(`/movie/${movie.movieId}`, {
-    state: { movie: movie, isWatching: true }, // Start watching immediately
-  });
-};
 
-const handleInfoClick = (movie) => {
-  if (!movie.movieId) {
-    console.error("Movie ID is undefined:", movie);
-    return;
-  }
-  navigate(`/movie/${movie.movieId}`, {
-    state: { movie: movie, isWatching: false }, // Go to info tab, not watching
-  });
-};
-  if (!movies || movies.length === 0 || !currentMovie) {
+  const handleWatchNowClick = (movie) => {
+    if (!movie.movieId) {
+      console.error("Movie ID is undefined:", movie);
+      return;
+    }
+    navigate(`/movie/${movie.movieId}`, {
+      state: { movie: movie, isWatching: true },
+    });
+  };
+
+  const handleInfoClick = (movie) => {
+    if (!movie.movieId) {
+      console.error("Movie ID is undefined:", movie);
+      return;
+    }
+    navigate(`/movie/${movie.movieId}`, {
+      state: { movie: movie, isWatching: false },
+    });
+  };
+
+  // Hiển thị LoadingSpinner nếu chưa sẵn sàng hoặc không có phim
+  if (!isBannerReady || !currentMovie) {
     return (
       <div
         className="w-full bg-black flex items-center justify-center"
@@ -90,8 +117,8 @@ const handleInfoClick = (movie) => {
       <div
         className={`absolute inset-0 bg-black bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-out ${
           isTransitioning
-            ? "transform translate-x-full opacity-0"
-            : "transform translate-x-0 opacity-100"
+            ? "opacity-0" // Đã bỏ translate-x-full vì nó gây lỗi khi thay đổi nhanh
+            : "opacity-100"
         }`}
         style={{
           backgroundImage: `url(${currentMovie.poster})`,
@@ -105,8 +132,8 @@ const handleInfoClick = (movie) => {
         <div
           className={`w-full max-w-7xl mx-auto transition-all duration-1000 ease-out ${
             isTransitioning
-              ? "transform translate-x-full opacity-0"
-              : "transform translate-x-0 opacity-100"
+              ? "opacity-0" // Đã bỏ translate-x-full vì nó gây lỗi khi thay đổi nhanh
+              : "opacity-100"
           }`}
         >
           {/* Content Layout */}
@@ -128,16 +155,23 @@ const handleInfoClick = (movie) => {
                   {/* Movie Info Tags */}
                   <div className="flex items-center justify-center lg:justify-start space-x-3 flex-wrap gap-2">
                     {currentMovie.releaseYear && (
-                      <span className=" text-white font-bold border-4 border-white bg-white/30 px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
+                      <span className="text-white font-bold border-4 border-white bg-white/30 px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
                         {currentMovie.releaseYear}
                       </span>
                     )}
-                    <span className=" border-4 font-bold border-white bg-white/30 text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
+                    <span className="border-4 font-bold border-white bg-white/30 text-white px-4 py-2 text-sm font-semibold rounded-full transform transition-all duration-300 hover:scale-105">
                       {currentMovie.quality}
                     </span>
-                    <span className="text-white text-sm font-bold border-4 border-white bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
-                      {currentGenres.join(", ")}
-                    </span>
+                    {/* Hiển thị LoadingSpinner nhỏ nếu thể loại đang tải */}
+                    {isLoadingGenres ? (
+                      <div className="flex items-center justify-center w-24 h-8">
+                        <LoadingSpinner size="small" /> {/* Giả định LoadingSpinner có prop `size` */}
+                      </div>
+                    ) : (
+                      <span className="text-white text-sm font-bold border-4 border-white bg-white/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                        {currentGenres.join(", ")}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -166,12 +200,12 @@ const handleInfoClick = (movie) => {
                     >
                       <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10
-              10-4.48 10-10S17.52 2 12 2zm0 17
-              c-.55 0-1-.45-1-1v-6c0-.55.45-1
-              1-1s1 .45 1 1v6c0 .55-.45 1-1 1zm0-10
-              c-.83 0-1.5-.67-1.5-1.5S11.17 6
-              12 6s1.5.67 1.5 1.5S12.83 9
-              12 9z"
+                      10-4.48 10-10S17.52 2 12 2zm0 17
+                      c-.55 0-1-.45-1-1v-6c0-.55.45-1
+                      1-1s1 .45 1 1v6c0 .55-.45 1-1 1zm0-10
+                      c-.83 0-1.5-.67-1.5-1.5S11.17 6
+                      12 6s1.5.67 1.5 1.5S12.83 9
+                      12 9z"
                       />
                     </svg>
                   </button>
@@ -219,13 +253,26 @@ const handleInfoClick = (movie) => {
           <button
             key={index}
             onClick={() => {
-              if (index !== currentMovieIndex) {
-                setIsTransitioning(true);
-                setTimeout(() => {
-                  setCurrentMovieIndex(index);
-                  setIsTransitioning(false);
-                }, 50);
-              }
+              // Xóa interval hiện tại để tránh xung đột khi người dùng click
+              clearInterval(intervalRef.current);
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setCurrentMovieIndex(index);
+                setIsTransitioning(false);
+                // Khởi tạo lại interval sau khi người dùng click
+                // Đảm bảo Banner không bị lỗi nếu movies.length là 0
+                if (movies && movies.length > 0) {
+                  intervalRef.current = setInterval(() => {
+                    setIsTransitioning(true);
+                    setTimeout(() => {
+                      setCurrentMovieIndex((prevIndex) =>
+                        prevIndex === movies.length - 1 ? 0 : prevIndex + 1
+                      );
+                      setIsTransitioning(false);
+                    }, 500);
+                  }, 5000);
+                }
+              }, 500);
             }}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
               index === currentMovieIndex

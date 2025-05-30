@@ -26,10 +26,7 @@ function MovieItem({ movie }) {
           src={movie.thumbnail}
           alt={movie.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-        />
-
-        {/* --- Black Overlay Added Here --- */}
-        {/* This div creates a semi-transparent black layer over the image */}
+        />  
         <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
 
         {/* Quality badge */}
@@ -49,11 +46,9 @@ function MovieItem({ movie }) {
 
       {/* Movie Info */}
       <div className="mt-2">
-        {/* Line clamping for title to prevent overflow */}
         <h3 className="text-sm font-medium text-white line-clamp-2 group-hover:text-red-400 transition-colors">
           {movie.title}
         </h3>
-        {/* Display original name, fall back to "N/A" if not available */}
         <p className="text-xs text-gray-400 mt-1">
           {movie.originName || "N/A"}
         </p>

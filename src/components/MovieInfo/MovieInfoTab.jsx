@@ -1,19 +1,6 @@
-import React from 'react';
 import { Calendar, Film, Monitor, Globe, Play, Eye, CheckCircle, Clock } from 'lucide-react';
 
 const MovieInfoTab = ({ movie }) => {
-  // Mock data for demo
-  const mockMovie = movie || {
-    originName: "The Last: Naruto the Movie",
-    releaseYear: 2014,
-    type: "SINGLE",
-    status: "COMPLETED",
-    quality: "HD",
-    lang: "VIETSUB",
-    episodeTotal: 1,
-    view: 246,
-    description: "Em gái của Hinata Hyuga đã bị bắt cóc, vì vậy Naruto phải làm những gì anh có thể cứu cô."
-  };
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
@@ -37,35 +24,35 @@ const MovieInfoTab = ({ movie }) => {
   const movieDetails = [
     { 
       label: 'Original Name', 
-      value: mockMovie.originName,
+      value: movie.originName,
       icon: <Film className="w-4 h-4" />,
       color: 'text-blue-400'
     },
     { 
       label: 'Release Year', 
-      value: mockMovie.releaseYear,
+      value: movie.releaseYear,
       icon: <Calendar className="w-4 h-4" />,
       color: 'text-green-400'
     },
     { 
       label: 'Type', 
-      value: mockMovie.type,
+      value: movie.type,
       icon: <Monitor className="w-4 h-4" />,
       color: 'text-purple-400',
       badge: true,
-      badgeColor: getTypeColor(mockMovie.type)
+      badgeColor: getTypeColor(movie.type)
     },
     { 
       label: 'Status', 
-      value: mockMovie.status,
+      value: movie.status,
       icon: <CheckCircle className="w-4 h-4" />,
       color: 'text-green-400',
       badge: true,
-      badgeColor: getStatusColor(mockMovie.status)
+      badgeColor: getStatusColor(movie.status)
     },
     { 
       label: 'Quality', 
-      value: mockMovie.quality,
+      value: movie.quality,
       icon: <Monitor className="w-4 h-4" />,
       color: 'text-red-400',
       badge: true,
@@ -73,7 +60,7 @@ const MovieInfoTab = ({ movie }) => {
     },
     { 
       label: 'Language', 
-      value: mockMovie.lang,
+      value: movie.lang,
       icon: <Globe className="w-4 h-4" />,
       color: 'text-cyan-400',
       badge: true,
@@ -81,13 +68,13 @@ const MovieInfoTab = ({ movie }) => {
     },
     { 
       label: 'Episodes', 
-      value: mockMovie.episodeTotal,
+      value: movie.episodeTotal,
       icon: <Play className="w-4 h-4" />,
       color: 'text-yellow-400'
     },
     { 
       label: 'Views', 
-      value: mockMovie.view?.toLocaleString() || '0',
+      value: movie.view?.toLocaleString() || '0',
       icon: <Eye className="w-4 h-4" />,
       color: 'text-orange-400'
     }
@@ -109,7 +96,7 @@ const MovieInfoTab = ({ movie }) => {
           <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 to-purple-500/20 rounded-xl blur opacity-25"></div>
           <div className="relative bg-gray-800/60 backdrop-blur-sm p-6 rounded-xl border border-gray-700/50">
             <p className="text-gray-300 leading-relaxed text-lg">
-              {mockMovie.description}
+              {movie.description}
             </p>
           </div>
         </div>

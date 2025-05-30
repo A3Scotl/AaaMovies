@@ -1,54 +1,74 @@
-import React from "react";
-import { Play, CheckCircle, Pause } from "lucide-react"; // Import CheckCircle icon
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import PropTypes from "prop-types";
-
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 8,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1200 },
-    items: 6,
-  },
-  tablet: {
-    breakpoint: { max: 1200, min: 768 },
-    items: 4,
-  },
-  mobile: {
-    breakpoint: { max: 768, min: 480 },
-    items: 3,
-  },
-  smallMobile: {
-    breakpoint: { max: 480, min: 0 },
-    items: 2,
-  },
-};
+import Slider from "react-slick";
+import { Play, Pause } from "lucide-react";
 
 const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToScroll: 1,
+    autoplay: false,
+    centerMode: true,
+    centerPadding: '40px',
+    initialSlide: 0,
+    lazyLoad: 'ondemand',
+    swipeToSlide: true,
+
+    responsive: [
+      {
+        breakpoint: 4000,
+        settings: {
+          slidesToShow: 6,
+          centerPadding: '60px',
+        }
+      },
+      {
+        breakpoint: 3000,
+        settings: {
+          slidesToShow: 5,
+          centerPadding: '50px',
+        }
+      },
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 4,
+          centerPadding: '40px',
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+          centerPadding: '30px',
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          centerPadding: '20%',
+        }
+      }
+    ]
+  };
+
   return (
     <div className="space-y-4">
-      <Carousel
-        responsive={responsive}
-        draggable={false}
-        itemClass="px-2"
-        containerClass="pb-4"
-        removeArrowOnDeviceType={["tablet", "mobile", "smallMobile"]}
-      >
+      <Slider {...settings}>
         {episodes.map((episode) => {
           const isSelected = episode.episodeId === selectedEpisodeId;
 
           return (
-            <div key={episode.episodeId} className="h-full">
+            <div key={episode.episodeId} className="px-2">
               <button
                 onClick={() => onEpisodeSelect(episode)}
-                className={`group rounded-lg overflow-hidden transition-all duration-300 w-full h-full
+                className={`group rounded-lg overflow-hidden transition-all duration-300 w-full h-full block
                   ${
                     isSelected
-                      ? "bg-gray-600 scale-100 ring-2 ring-red-100" 
-                      : "bg-gray-800 hover:bg-gray-700 hover:scale-105" 
+                      ? "bg-gray-600 scale-100 ring-2 ring-red-500"
+                      : "bg-gray-800 hover:bg-gray-700 hover:scale-[1.02]"
                   }
                 `}
               >
@@ -57,7 +77,7 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
                     src={episode.thumbnail}
                     alt={episode.title}
                     className={`w-full h-full object-cover ${
-                      isSelected ? "opacity-70" : "" 
+                      isSelected ? "opacity-70" : ""
                     }`}
                     loading="lazy"
                   />
@@ -66,13 +86,12 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
                       className={`rounded-full p-2
                         ${
                           isSelected
-                            ? "bg-red-600 opacity-100 scale-100" 
-                            : "bg-red-600 opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100" 
+                            ? "bg-red-600 opacity-100 scale-100"
+                            : "bg-red-600 opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100"
                         }
                         transition-all duration-300
                       `}
                     >
-                      {/* Conditional rendering for the icon */}
                       {isSelected ? (
                         <Pause className="w-6 h-6 text-white fill-current" />
                       ) : (
@@ -91,14 +110,14 @@ const EpisodesGrid = ({ episodes, onEpisodeSelect, selectedEpisodeId }) => {
                     {episode.title}
                   </h3>
                   <p className="text-gray-400 text-xs">
-                    {episode.duration} minutes
+                    {episode.duration} phút
                   </p>
                 </div>
               </button>
             </div>
           );
         })}
-      </Carousel>
+      </Slider>
     </div>
   );
 };
