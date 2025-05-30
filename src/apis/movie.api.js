@@ -56,3 +56,12 @@ export const getMovieById = async (id) => {
         throw error;
     }
 };
+export const searchMovies = async (value) => {
+    try {
+        const response = await Instance.get(`/movies/search?value=${value}`);
+        return response.data;
+    } catch (error) {
+        console.error(`Error fetching movie by ${value}:`, error);
+        throw error;
+    }
+};

@@ -10,15 +10,13 @@ function MovieItem({ movie }) {
       console.error("Movie ID is undefined:", movie);
       return;
     }
-    navigate(`/movie/${movie.movieId}`, {
-      state: { movie },
-    });
+    navigate(`/movie/${movie.movieId}`, { state: { movieId:movie.movieId } });
   };
 
   return (
     <div
       onClick={handleMovieClick}
-      className="relative group cursor-pointer transform transition-all duration-300 hover:scale-105"
+      className="relative group cursor-pointer  transform transition-all duration-300 hover:scale-105"
     >
       {/* Movie Poster Container */}
       <div className="relative overflow-hidden rounded-lg bg-gray-800 aspect-[2/3]">

@@ -7,7 +7,6 @@ const VideoPlayer = ({ episode, onBack, onEpisodeSelect, allEpisodes }) => {
     allEpisodes?.findIndex((ep) => ep.episodeId === episode.episodeId) || 0;
   const nextEpisode = allEpisodes?.[currentEpisodeIndex + 1];
   const prevEpisode = allEpisodes?.[currentEpisodeIndex - 1];
-
   return (
     <div className="relative pt-20 bg-black min-h-screen">
       {/* Header Controls */}
