@@ -15,13 +15,13 @@ const VideoHeader = ({ episode, onBack, onEpisodeSelect, nextEpisode, prevEpisod
         </button>
 
         {/* Episode Info */}
-        <div className="text-center text-white">
+        {/* <div className="text-center text-white">
           <h3 className="font-bold text-lg">{episode.title}</h3>
           <p className="text-gray-300 text-sm">{episode.duration} minutes</p>
-        </div>
+        </div> */}
 
         {/* Episode Navigation */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           {prevEpisode && (
             <button
               onClick={() => onEpisodeSelect(prevEpisode)}
@@ -41,7 +41,7 @@ const VideoHeader = ({ episode, onBack, onEpisodeSelect, nextEpisode, prevEpisod
               <SkipForward className="w-4 h-4" />
             </button>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
