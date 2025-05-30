@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Banner from "../components/Banner";
-import HorizontalMovieList from "../components/HorizontalMovieList";
+import HorizontalMovieList from "../components/Movie/HorizontalMovieList";
 import { getAllNewMovies, getAllHotMovies } from "../apis/movie.api";
 
 function Home() {

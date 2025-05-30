@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { getAllMovies } from "../apis/movie.api";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { useNavigate } from "react-router-dom";
+import MovieItem from "../components/Movie/MovieItem"; 
 
 function Movies() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const moviesPerPage = 32;
@@ -39,16 +38,7 @@ function Movies() {
       setCurrentPage(currentPage - 1);
     }
   };
-  const handleMovieClick = async (movie) => {
-    if (!movie.movieId) {
-      console.error("Movie ID is undefined:", movie);
-      return;
-    }
-    console.log(movie);
-    navigate(`/movie/${movie.movieId}`, {
-      state: { movie },
-    });
-  };
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -74,50 +64,7 @@ function Movies() {
       {/* Movies Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8">
         {currentMovies.map((movie, index) => (
-          <div
-            key={movie.id || index}
-            className="relative group cursor-pointer transform transition-all duration-300 hover:scale-105"
-          >
-            {/* Movie Poster */}
-            <div  onClick={() => handleMovieClick(movie)} className="relative overflow-hidden rounded-lg bg-gray-800 aspect-[2/3]">
-              <img
-                src={movie.thumbnail}
-                alt={movie.title}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-
-              {/* Quality badge */}
-              {movie.quality && (
-                <div className="absolute top-2 left-2 bg-yellow-100 text-black text-xs px-2 py-1 rounded font-bold">
-                  {movie.quality}
-                </div>
-              )}
-              {/* episodeTotal badge
-              {movie.episodeTotal >1 && (
-                <div className="absolute top-2 left-10 bg-yellow-500 text-black text-xs px-2 py-1 rounded font-bold">
-                  {movie.episodeTotal}
-                </div>
-                
-              )} */}
-
-              {/* Year badge */}
-              {movie.year && (
-                <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded">
-                  {movie.releaseYear}
-                </div>
-              )}
-            </div>
-
-            {/* Movie Info */}
-            <div className="mt-2">
-              <h3 className="text-sm font-medium text-white line-clamp-2 group-hover:text-red-400 transition-colors">
-                {movie.title}
-              </h3>
-              <p className="text-xs text-gray-400 mt-1">
-                {movie.originName || "N/A"}
-              </p>
-            </div>
-          </div>
+          <MovieItem key={movie.id || index} movie={movie} />
         ))}
       </div>
 
