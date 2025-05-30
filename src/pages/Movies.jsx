@@ -1,34 +1,37 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { getAllMovies } from "../apis/movie.api";
 import { getAllCategories } from "../apis/category.api";
 import { getAllCountries } from "../apis/country.api";
 import LoadingSpinner from "../components/LoadingSpinner";
 import MovieItem from "../components/Movie/MovieItem";
+import MovieFilter from "../components/Movie/MovieFilter";
+import { ChevronLeft, ChevronRight, Film } from "lucide-react";
 
-function Movies() {
+const MOVIES_PER_PAGE = 24;
+const MOVIE_TYPES = ["SINGLE", "SERIES"];
+
+const Movies = () => {
+  // Data states
   const [movies, setMovies] = useState([]);
-  const [genresOptions, setGenresOptions] = useState([]); // Lưu tên thể loại để hiển thị
-  const [countriesOptions, setCountriesOptions] = useState([]); // Lưu tên quốc gia để hiển thị
-
-  // Maps để chuyển đổi tên <=> ID cho việc lọc
+  const [genresOptions, setGenresOptions] = useState([]);
+  const [countriesOptions, setCountriesOptions] = useState([]);
   const [genreNameToIdMap, setGenreNameToIdMap] = useState({});
   const [countryNameToIdMap, setCountryNameToIdMap] = useState({});
-
-  const [filteredMovies, setFilteredMovies] = useState([]);
+  
+  // UI states
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const moviesPerPage = 32;
+  
+  // Filter states
+  const [filters, setFilters] = useState({
+    year: "",
+    type: "",
+    genre: "",
+    country: "",
+    sortOrder: "newest"
+  });
 
-  // State cho các bộ lọc
-  const [filterYear, setFilterYear] = useState("");
-  const [filterType, setFilterType] = useState("");
-  const [filterGenre, setFilterGenre] = useState(""); // Tên thể loại được chọn
-  const [filterCountry, setFilterCountry] = useState(""); // Tên quốc gia được chọn
-
-  const movieTypes = ["SINGLE", "SERIES"]; // Giá trị thực tế từ API movie.type
-
-  // Fetch movies and filter options on component mount
+  // Fetch initial data
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -36,32 +39,30 @@ function Movies() {
 
         const [moviesData, categoriesData, countriesData] = await Promise.all([
           getAllMovies(),
-          getAllCategories(), // Trả về mảng các object {id, name, active}
-          getAllCountries(),   // Trả về mảng các object {id, name, active}
+          getAllCategories(),
+          getAllCountries(),
         ]);
 
-        // Lưu trữ tên để hiển thị trong select
-        setGenresOptions(categoriesData.map(item => item.name) || []);
-        setCountriesOptions(countriesData.map(item => item.name) || []);
+        // Set display options
+        setGenresOptions(categoriesData.map((item) => item.name) || []);
+        setCountriesOptions(countriesData.map((item) => item.name) || []);
 
-        // Tạo maps để chuyển đổi tên -> ID phục vụ việc lọc
+        // Create name-to-ID mapping for filtering
         const genreMap = categoriesData.reduce((acc, genre) => {
-            acc[genre.name] = genre.id;
-            return acc;
+          acc[genre.name] = genre.id;
+          return acc;
         }, {});
         setGenreNameToIdMap(genreMap);
 
         const countryMap = countriesData.reduce((acc, country) => {
-            acc[country.name] = country.id;
-            return acc;
+          acc[country.name] = country.id;
+          return acc;
         }, {});
         setCountryNameToIdMap(countryMap);
 
         setMovies(moviesData);
-        setFilteredMovies(moviesData);
-        setTotalPages(Math.ceil(moviesData.length / moviesPerPage));
-      } catch (err) {
-        console.error("Error fetching initial data:", err);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -70,71 +71,106 @@ function Movies() {
     fetchInitialData();
   }, []);
 
-  // Effect để áp dụng bộ lọc mỗi khi filter criteria hoặc movies thay đổi
-  useEffect(() => {
-    let tempMovies = [...movies]; // Bắt đầu với bản sao của tất cả phim
+  // Get filtered and sorted movies
+  const filteredMovies = useMemo(() => {
+    let result = [...movies];
 
-    // Lọc theo năm phát hành
-    if (filterYear) {
-      tempMovies = tempMovies.filter(
-        (movie) =>
-          movie.releaseYear && movie.releaseYear.toString() === filterYear
+    // Apply filters
+    if (filters.year) {
+      result = result.filter(
+        (movie) => movie.releaseYear && movie.releaseYear.toString() === filters.year
       );
     }
 
-    // Lọc theo loại (SINGLE/SERIES)
-    if (filterType) {
-      tempMovies = tempMovies.filter((movie) => movie.type === filterType);
+    if (filters.type) {
+      result = result.filter((movie) => movie.type === filters.type);
     }
 
-    // Lọc theo thể loại (sử dụng categoryIds và filterGenre)
-    if (filterGenre) {
-      const selectedGenreId = genreNameToIdMap[filterGenre]; // Lấy ID từ tên đã chọn
-      if (selectedGenreId !== undefined) { // Đảm bảo ID được tìm thấy
-        tempMovies = tempMovies.filter(
+    if (filters.genre) {
+      const selectedGenreId = genreNameToIdMap[filters.genre];
+      if (selectedGenreId !== undefined) {
+        result = result.filter(
           (movie) => movie.categoryIds && movie.categoryIds.includes(selectedGenreId)
         );
       } else {
-        // Nếu tên thể loại không hợp lệ, không có phim nào khớp
-        tempMovies = [];
+        result = [];
       }
     }
 
-    // Lọc theo quốc gia (sử dụng countryId và filterCountry)
-    if (filterCountry) {
-      const selectedCountryId = countryNameToIdMap[filterCountry]; // Lấy ID từ tên đã chọn
-      if (selectedCountryId !== undefined) { // Đảm bảo ID được tìm thấy
-        tempMovies = tempMovies.filter(
+    if (filters.country) {
+      const selectedCountryId = countryNameToIdMap[filters.country];
+      if (selectedCountryId !== undefined) {
+        result = result.filter(
           (movie) => movie.countryId && movie.countryId === selectedCountryId
         );
       } else {
-        // Nếu tên quốc gia không hợp lệ, không có phim nào khớp
-        tempMovies = [];
+        result = [];
       }
     }
 
-    setFilteredMovies(tempMovies);
-    setCurrentPage(1); // Đặt lại trang về 1 mỗi khi lọc thay đổi
-    setTotalPages(Math.ceil(tempMovies.length / moviesPerPage));
-  }, [
-    movies, // Cần movies trong dependencies vì tempMovies bắt đầu từ movies
-    filterYear,
-    filterType,
-    filterGenre,
-    filterCountry,
-    moviesPerPage,
-    genreNameToIdMap,   // Cần để map tên -> ID
-    countryNameToIdMap, // Cần để map tên -> ID
-  ]);
+    // Apply sorting
+    switch (filters.sortOrder) {
+      case "newest":
+        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      case "oldest":
+        result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        break;
+      case "mostViewed":
+        result.sort((a, b) => b.view - a.view);
+        break;
+      case "leastViewed":
+        result.sort((a, b) => a.view - b.view);
+        break;
+      case "latestRelease":
+        result.sort((a, b) => b.releaseYear - a.releaseYear);
+        break;
+      case "oldestRelease":
+        result.sort((a, b) => a.releaseYear - b.releaseYear);
+        break;
+      default:
+        break;
+    }
 
-  // Get current movies for pagination (sử dụng filteredMovies)
-  const indexOfLastMovie = currentPage * moviesPerPage;
-  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
-  const currentMovies = filteredMovies.slice(
-    indexOfFirstMovie,
-    indexOfLastMovie
-  );
+    return result;
+  }, [movies, filters, genreNameToIdMap, countryNameToIdMap]);
 
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredMovies.length / MOVIES_PER_PAGE);
+  const currentMovies = useMemo(() => {
+    const startIndex = (currentPage - 1) * MOVIES_PER_PAGE;
+    const endIndex = startIndex + MOVIES_PER_PAGE;
+    return filteredMovies.slice(startIndex, endIndex);
+  }, [filteredMovies, currentPage]);
+
+  // Get available years
+  const availableYears = useMemo(() => {
+    return [...new Set(movies.map((movie) => movie.releaseYear).filter(Boolean))]
+      .sort((a, b) => b - a);
+  }, [movies]);
+
+  // Handle filter changes
+  const handleFilterChange = (filterType, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterType]: value
+    }));
+    setCurrentPage(1); // Reset to first page when filters change
+  };
+
+  // Clear all filters
+  const handleClearFilters = () => {
+    setFilters({
+      year: "",
+      type: "",
+      genre: "",
+      country: "",
+      sortOrder: "newest"
+    });
+    setCurrentPage(1);
+  };
+
+  // Pagination handlers
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
@@ -147,168 +183,95 @@ function Movies() {
     }
   };
 
-  // Show loading spinner while fetching data
+  // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen text-white py-28 px-12 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white py-28 px-6 flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );
   }
 
-  // Lấy danh sách các năm duy nhất từ dữ liệu phim (nếu có)
-  const availableYears = [
-    ...new Set(movies.map((movie) => movie.releaseYear).filter(Boolean)),
-  ].sort((a, b) => b - a);
-
   return (
-    <div className="min-h-screen text-white py-36 px-12">
-      {/* Header */}
-      <div className="mb-6">
-        <p className="text-gray-400 text-sm mt-1">All movies</p>
-      </div>
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white py-20">
+      <div className="w-[90vw] mx-auto">
 
-      {/* Filter Section */}
-      <div className="mb-8 p-4 bg-gray-900 rounded-lg shadow-md flex flex-wrap gap-4 items-center">
-        <h3 className="text-lg font-semibold text-white mr-4">Bộ lọc:</h3>
+        {/* Filter Component */}
+        <MovieFilter
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+          options={{
+            availableYears,
+            movieTypes: MOVIE_TYPES,
+            genresOptions,
+            countriesOptions
+          }}
+        />
 
-        {/* Filter by Year */}
-        <select
-          className="bg-gray-800 text-white p-2 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-          value={filterYear}
-          onChange={(e) => setFilterYear(e.target.value)}
-        >
-          <option value="">Năm phát hành</option>
-          {availableYears.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-
-        {/* Filter by Type */}
-        <select
-          className="bg-gray-800 text-white p-2 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-        >
-          <option value="">Loại phim</option>
-          {movieTypes.map((type) => (
-            <option key={type} value={type}>
-              {type === "SINGLE" ? "Phim lẻ" : "Phim bộ"}
-            </option>
-          ))}
-        </select>
-
-        {/* Filter by Genre */}
-        <select
-          className="bg-gray-800 text-white p-2 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-          value={filterGenre}
-          onChange={(e) => setFilterGenre(e.target.value)}
-        >
-          <option value="">Thể loại</option>
-          {genresOptions.map((genre) => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
-
-        {/* Filter by Country */}
-        <select
-          className="bg-gray-800 text-white p-2 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-          value={filterCountry}
-          onChange={(e) => setFilterCountry(e.target.value)}
-        >
-          <option value="">Quốc gia</option>
-          {countriesOptions.map((country) => (
-            <option key={country} value={country}>
-              {country}
-            </option>
-          ))}
-        </select>
-
-        {/* Clear Filters Button */}
-        {(filterYear || filterType || filterGenre || filterCountry) && (
-          <button
-            onClick={() => {
-              setFilterYear("");
-              setFilterType("");
-              setFilterGenre("");
-              setFilterCountry("");
-            }}
-            className="ml-auto px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-          >
-            Xóa bộ lọc
-          </button>
-        )}
-      </div>
-
-      {/* Movies Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8">
-        {currentMovies.length > 0 ? (
-          currentMovies.map((movie, index) => (
-            <MovieItem key={movie.id || index} movie={movie} />
-          ))
-        ) : (
-          <div className="col-span-full text-center text-gray-400 text-lg">
-            Không tìm thấy phim phù hợp với bộ lọc.
-          </div>
-        )}
-      </div>
-
-      {/* Pagination */}
-      {filteredMovies.length > moviesPerPage && (
-        <div className="flex items-center justify-center gap-4">
-          <button
-            onClick={handlePrevPage}
-            disabled={currentPage === 1}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          <div className="flex items-center gap-2">
-            <span className="text-white font-medium">{currentPage}</span>
-            <span className="text-gray-400">:</span>
-            <span className="text-white font-medium">{totalPages}</span>
-          </div>
-
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+        {/* Results Info */}
+        <div className="mb-6 flex items-center justify-between">
+          <p className="text-gray-300">
+            Showing <span className="text-white font-semibold">{currentMovies.length}</span> of{" "}
+            <span className="text-white font-semibold">{filteredMovies.length}</span> movies
+          </p>
+          {totalPages > 1 && (
+            <p className="text-gray-400">
+              Page {currentPage} of {totalPages}
+            </p>
+          )}
         </div>
-      )}
+
+        {/* Movies Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 mb-8">
+          {currentMovies.length > 0 ? (
+            currentMovies.map((movie) => (
+              <MovieItem key={movie.id} movie={movie} />
+            ))
+          ) : (
+            <div className="col-span-full">
+              <div className="text-center py-16">
+                <Film className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-400 mb-2">
+                  No movies found
+                </h3>
+                <p className="text-gray-500">
+                  Try adjusting your filters to see more results
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800 transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            <div className="flex items-center gap-3 px-4 py-3 bg-gray-800 rounded-lg">
+              <span className="text-white font-medium">{currentPage}</span>
+              <span className="text-gray-400">/</span>
+              <span className="text-white font-medium">{totalPages}</span>
+            </div>
+
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-800 transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default Movies;
