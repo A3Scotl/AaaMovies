@@ -29,7 +29,7 @@ function Home() {
 
   return (
     <div className="bg-black">
-      <Banner movies={hotMovies} />
+      <Banner movies={newMovies} />
       <HorizontalMovieList title="Hot Movies" movies={hotMovies} />
       <HorizontalMovieList title="New Movies" movies={newMovies} />
     </div>
