@@ -1,6 +1,6 @@
 import Instance from './instance';
 
-export const getAllcategories = async () => {
+export const getAllCategories = async () => {
     try {
         const response = await Instance.get('/categories');
         return response.data;
